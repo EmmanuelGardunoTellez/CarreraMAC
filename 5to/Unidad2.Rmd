@@ -1,0 +1,125 @@
+---
+title: "Unidad 2"
+date: "Octubre 2020"
+author: "Estadística I"
+output: word_document
+---
+# Métodos para la obtención de variables aleatorias
+
+## Método de las funciones de distribuciones
+
+Encuentra la función de probabilidad de la variable $Y$, si $Y=3X-1$, donde:
+\begin{center}
+ f (x) =$\left\{
+  \begin{array}{lr}
+   2x \ \ \ 0 \leq x \leq 1\\
+        \ 0 \ \ \ \ \ c.o.c.
+  \end{array}
+\right.$
+ \end{center}
+ 
+```{r, results = 'hide', message = F}
+library(tidyverse)
+```
+
+```{r}
+f.z <- function(x) (2 * x) * (x > 0) * (x < 1)
+z <- seq(-2, 3, length = 1000)
+tab.fz <- data.frame(x = z, f.x = f.z(z))
+ggplot( tab.fz,  aes(x = x, y = f.x))+ geom_line(color = "red", size= 1) + 
+  labs(x = "x", y="f(x)", title = "Función de probabilidad de la variable X")
+
+f.w <-function(x) (2 / 9 * (x + 1)) * (x>-1) * (x<2)
+tab.fw <- data.frame(y = z, f.y = f.w(z))
+ggplot( tab.fw,  aes(x = y, y = f.y)) + 
+  geom_area(color = "blue", fill = "blue",size = 1) + 
+  labs(x = "y", y="f(y)", title = "Función de probabilidad de la variable Y")
+
+F.z <-function(x) (x ^ 2) * (x > 0) * (x < 1) + 1 * (x >= 1)
+tab.Fz <- data.frame(x = z, F.x = F.z(z))
+ggplot( tab.Fz,  aes(x = x, y = F.x))+  geom_line(color = "red", size= 1) + 
+  labs(x = "x", y="F(x)", title = "Función de probabilidad acumulada de la 
+       variable X")
+
+F.w <-function(x) (((x+1)/3)^2)*(x>-1)*(x<2)+1*(x>=2)
+tab.Fw <- data.frame(y = z, F.y = F.w(z))
+ggplot( tab.Fw,  aes(x = y, y = F.y))+   geom_area(color = "blue", fill = "blue",
+                                                   size = 1) + 
+  labs(x = "y", y="F(y)", title = "Función de probabilidad acumulada de la 
+       variable Y")
+
+```
+La función de densidad conjunta $X_1$ y $X_2$ está dada por
+
+\begin{center}
+ $f (x_1, x_2)$ =$\left\{
+  \begin{array}{lr}
+   3x_1 \ \ \ 0 \leq x_2 \leq x_1 \leq 1\\
+  \ 0 \ \ \ \ \ \ \ \ \ \ \ \ \ c.o.c.
+  \end{array}
+\right.$
+ \end{center}
+
+```{r}
+f <- function(x1, x2) 3 * x1* (x2 >  0) *(x1 > x2) * (1 > x1)
+x1 <- seq(from = -1, to = 2, length = 50)
+x2 <- x1
+z <- outer(x1, x2, f)
+persp(x1,x2,z, main = "Función de densidad", col = "yellow", theta = 0, phi = 15)
+persp(x1,x2,z, main = "Función de densidad", col = "yellow", theta = 30, phi = 15)
+persp(x1,x2,z, main = "Función de densidad", col = "yellow", theta = 90, phi = 15)
+```
+
+## Método de las transformaciones
+Sea $X \sim unif(0,1)$. Si $Y=-\dfrac{1}{10}lnx$. Muestra que $Y \sim exp(10)$
+
+```{r}
+x <- seq(0, 2, length = 1000)
+plot(x, dunif(x, 0, 1), type = "l", lwd = 3, main = "unif(0,1)", xlab = "x", 
+     ylab = "f(x)", col = "red1")
+plot(x, dexp(x,10), type = "l", lwd = 3, main = "exp(10)",xlab = "y", 
+     ylab = "f(y)", col = "red1")
+```
+
+## Método de la función generadora de momentos
+
+Sea $X \sim \ exp(\lambda)$. Calcula $M_X(t)$. Cuando $\lambda = 10$
+
+```{r}
+lambda <- 10
+M.x <- function(t) lambda / (lambda - t) 
+t <- seq(10, 100, length = 1000)
+plot(t, M.x(t), type = "l", lwd = 3, main = "Función generadora de momentos", 
+     xlab = "t", ylab = "M(t)", col = "green")
+
+lambda <- 10
+dM.x <- function(t) lambda / (lambda - t) ^ 2
+t <- seq(0, 5, length = 1000)
+plot(t, dM.x(t), type = "l", lwd = 3, main = "Primera derivada de la función 
+      generadora de momentos", xlab = "t", ylab = "dM(t)/dt", col = "green1")
+
+
+```
+
+
+## Distribuciones derivadas de la normal
+Simula 1000 observaciones de una distribución $\chi_(2)$, a partir de varibles normales y cualcula la media y la varianza de la muestra obtenida.
+```{r}
+x1 <- rnorm(1000,0,1)
+x2 <- rnorm(1000,0,1)
+fz <- x1 ^ 2 + x2 ^ 2
+z <- seq(0, 1, length=1000)
+
+hist(fz, main = "Ji cuadrada con 2 grados de libertad", ylab = "Probabilidad", 
+     col="orange", freq = F, ylim = c(0, 0.5))
+curve(dchisq(x,2), add=T, lwd=3, col="red")
+
+mean(z)
+var(z)
+```
+```{r}
+```
+
+
+```{r}
+```

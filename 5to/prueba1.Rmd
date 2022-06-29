@@ -1,0 +1,52 @@
+---
+title: "Graficas 1.1"
+author: "Emmanuel Garduño Téllez"
+date: "12/10/2020"
+output: word_document
+---
+Prueba de graficas en r
+```{r}
+
+library("ggplot2")
+library("tidyverse")
+library("tibble")
+
+library(readr)
+
+
+
+list.files()
+setwd("C:\\Users\\Emman\\Documents\\CCH-N} FES-A\\fessaa\\FES\\5to Semestre\\Estadistica")
+list.files()
+housing <- read_csv("sataSets/EconomistData.csv")
+head(housing, 5)
+
+```
+
+\clearpage
+Grafica 1:
+```{r}
+ggplot(housing,aes(x =CPI, y=HDI)) +
+  geom_point()
+```
+Grafica 2:
+```{r}
+ggplot(housing,aes(x =CPI, y=HDI)) +
+  geom_point(color="blue")
+```
+Grafica 3:
+```{r}
+ggplot(housing,aes(x =CPI, y=HDI)) +
+  geom_point(aes(color=Region))
+```
+Grafica 4:
+```{r}
+ggplot(housing,aes(x =CPI, y=HDI)) +
+  geom_point(aes(color=Region, size=2))
+```
+Grafica 5:
+```{r}
+ggplot(housing,aes(x =CPI, y=HDI)) +
+  geom_point(aes(color=Region, size=HDI))
+```
+
