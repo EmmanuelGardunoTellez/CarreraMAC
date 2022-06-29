@@ -1,0 +1,646 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A34CE08C271B7CE4003AE8C1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34CE08B271B7CE4003AE8C1 /* AppDelegate.swift */; };
+		A34CE08E271B7CE4003AE8C1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34CE08D271B7CE4003AE8C1 /* SceneDelegate.swift */; };
+		A34CE090271B7CE4003AE8C1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34CE08F271B7CE4003AE8C1 /* ViewController.swift */; };
+		A34CE093271B7CE4003AE8C1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A34CE091271B7CE4003AE8C1 /* Main.storyboard */; };
+		A34CE096271B7CE4003AE8C1 /* Sewes.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A34CE094271B7CE4003AE8C1 /* Sewes.xcdatamodeld */; };
+		A34CE098271B7CE5003AE8C1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A34CE097271B7CE5003AE8C1 /* Assets.xcassets */; };
+		A34CE09B271B7CE5003AE8C1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A34CE099271B7CE5003AE8C1 /* LaunchScreen.storyboard */; };
+		A34CE0A6271B7CE6003AE8C1 /* SewesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34CE0A5271B7CE6003AE8C1 /* SewesTests.swift */; };
+		A34CE0B0271B7CE6003AE8C1 /* SewesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34CE0AF271B7CE6003AE8C1 /* SewesUITests.swift */; };
+		A34CE0B2271B7CE6003AE8C1 /* SewesUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34CE0B1271B7CE6003AE8C1 /* SewesUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A34CE0A2271B7CE6003AE8C1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A34CE080271B7CE4003AE8C1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A34CE087271B7CE4003AE8C1;
+			remoteInfo = Sewes;
+		};
+		A34CE0AC271B7CE6003AE8C1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A34CE080271B7CE4003AE8C1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A34CE087271B7CE4003AE8C1;
+			remoteInfo = Sewes;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A34CE088271B7CE4003AE8C1 /* Sewes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sewes.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A34CE08B271B7CE4003AE8C1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A34CE08D271B7CE4003AE8C1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		A34CE08F271B7CE4003AE8C1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		A34CE092271B7CE4003AE8C1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		A34CE095271B7CE4003AE8C1 /* Sewes.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Sewes.xcdatamodel; sourceTree = "<group>"; };
+		A34CE097271B7CE5003AE8C1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A34CE09A271B7CE5003AE8C1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A34CE09C271B7CE5003AE8C1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A34CE0A1271B7CE6003AE8C1 /* SewesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SewesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A34CE0A5271B7CE6003AE8C1 /* SewesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SewesTests.swift; sourceTree = "<group>"; };
+		A34CE0AB271B7CE6003AE8C1 /* SewesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SewesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A34CE0AF271B7CE6003AE8C1 /* SewesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SewesUITests.swift; sourceTree = "<group>"; };
+		A34CE0B1271B7CE6003AE8C1 /* SewesUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SewesUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A34CE085271B7CE4003AE8C1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A34CE09E271B7CE6003AE8C1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A34CE0A8271B7CE6003AE8C1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A34CE07F271B7CE4003AE8C1 = {
+			isa = PBXGroup;
+			children = (
+				A34CE08A271B7CE4003AE8C1 /* Sewes */,
+				A34CE0A4271B7CE6003AE8C1 /* SewesTests */,
+				A34CE0AE271B7CE6003AE8C1 /* SewesUITests */,
+				A34CE089271B7CE4003AE8C1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A34CE089271B7CE4003AE8C1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A34CE088271B7CE4003AE8C1 /* Sewes.app */,
+				A34CE0A1271B7CE6003AE8C1 /* SewesTests.xctest */,
+				A34CE0AB271B7CE6003AE8C1 /* SewesUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A34CE08A271B7CE4003AE8C1 /* Sewes */ = {
+			isa = PBXGroup;
+			children = (
+				A34CE08B271B7CE4003AE8C1 /* AppDelegate.swift */,
+				A34CE08D271B7CE4003AE8C1 /* SceneDelegate.swift */,
+				A34CE08F271B7CE4003AE8C1 /* ViewController.swift */,
+				A34CE091271B7CE4003AE8C1 /* Main.storyboard */,
+				A34CE097271B7CE5003AE8C1 /* Assets.xcassets */,
+				A34CE099271B7CE5003AE8C1 /* LaunchScreen.storyboard */,
+				A34CE09C271B7CE5003AE8C1 /* Info.plist */,
+				A34CE094271B7CE4003AE8C1 /* Sewes.xcdatamodeld */,
+			);
+			path = Sewes;
+			sourceTree = "<group>";
+		};
+		A34CE0A4271B7CE6003AE8C1 /* SewesTests */ = {
+			isa = PBXGroup;
+			children = (
+				A34CE0A5271B7CE6003AE8C1 /* SewesTests.swift */,
+			);
+			path = SewesTests;
+			sourceTree = "<group>";
+		};
+		A34CE0AE271B7CE6003AE8C1 /* SewesUITests */ = {
+			isa = PBXGroup;
+			children = (
+				A34CE0AF271B7CE6003AE8C1 /* SewesUITests.swift */,
+				A34CE0B1271B7CE6003AE8C1 /* SewesUITestsLaunchTests.swift */,
+			);
+			path = SewesUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A34CE087271B7CE4003AE8C1 /* Sewes */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A34CE0B5271B7CE6003AE8C1 /* Build configuration list for PBXNativeTarget "Sewes" */;
+			buildPhases = (
+				A34CE084271B7CE4003AE8C1 /* Sources */,
+				A34CE085271B7CE4003AE8C1 /* Frameworks */,
+				A34CE086271B7CE4003AE8C1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Sewes;
+			productName = Sewes;
+			productReference = A34CE088271B7CE4003AE8C1 /* Sewes.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A34CE0A0271B7CE6003AE8C1 /* SewesTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A34CE0B8271B7CE6003AE8C1 /* Build configuration list for PBXNativeTarget "SewesTests" */;
+			buildPhases = (
+				A34CE09D271B7CE6003AE8C1 /* Sources */,
+				A34CE09E271B7CE6003AE8C1 /* Frameworks */,
+				A34CE09F271B7CE6003AE8C1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A34CE0A3271B7CE6003AE8C1 /* PBXTargetDependency */,
+			);
+			name = SewesTests;
+			productName = SewesTests;
+			productReference = A34CE0A1271B7CE6003AE8C1 /* SewesTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		A34CE0AA271B7CE6003AE8C1 /* SewesUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A34CE0BB271B7CE6003AE8C1 /* Build configuration list for PBXNativeTarget "SewesUITests" */;
+			buildPhases = (
+				A34CE0A7271B7CE6003AE8C1 /* Sources */,
+				A34CE0A8271B7CE6003AE8C1 /* Frameworks */,
+				A34CE0A9271B7CE6003AE8C1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A34CE0AD271B7CE6003AE8C1 /* PBXTargetDependency */,
+			);
+			name = SewesUITests;
+			productName = SewesUITests;
+			productReference = A34CE0AB271B7CE6003AE8C1 /* SewesUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A34CE080271B7CE4003AE8C1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1300;
+				LastUpgradeCheck = 1300;
+				TargetAttributes = {
+					A34CE087271B7CE4003AE8C1 = {
+						CreatedOnToolsVersion = 13.0;
+					};
+					A34CE0A0271B7CE6003AE8C1 = {
+						CreatedOnToolsVersion = 13.0;
+						TestTargetID = A34CE087271B7CE4003AE8C1;
+					};
+					A34CE0AA271B7CE6003AE8C1 = {
+						CreatedOnToolsVersion = 13.0;
+						TestTargetID = A34CE087271B7CE4003AE8C1;
+					};
+				};
+			};
+			buildConfigurationList = A34CE083271B7CE4003AE8C1 /* Build configuration list for PBXProject "Sewes" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A34CE07F271B7CE4003AE8C1;
+			productRefGroup = A34CE089271B7CE4003AE8C1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A34CE087271B7CE4003AE8C1 /* Sewes */,
+				A34CE0A0271B7CE6003AE8C1 /* SewesTests */,
+				A34CE0AA271B7CE6003AE8C1 /* SewesUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A34CE086271B7CE4003AE8C1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A34CE09B271B7CE5003AE8C1 /* LaunchScreen.storyboard in Resources */,
+				A34CE098271B7CE5003AE8C1 /* Assets.xcassets in Resources */,
+				A34CE093271B7CE4003AE8C1 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A34CE09F271B7CE6003AE8C1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A34CE0A9271B7CE6003AE8C1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A34CE084271B7CE4003AE8C1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A34CE090271B7CE4003AE8C1 /* ViewController.swift in Sources */,
+				A34CE096271B7CE4003AE8C1 /* Sewes.xcdatamodeld in Sources */,
+				A34CE08C271B7CE4003AE8C1 /* AppDelegate.swift in Sources */,
+				A34CE08E271B7CE4003AE8C1 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A34CE09D271B7CE6003AE8C1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A34CE0A6271B7CE6003AE8C1 /* SewesTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A34CE0A7271B7CE6003AE8C1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A34CE0B2271B7CE6003AE8C1 /* SewesUITestsLaunchTests.swift in Sources */,
+				A34CE0B0271B7CE6003AE8C1 /* SewesUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A34CE0A3271B7CE6003AE8C1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A34CE087271B7CE4003AE8C1 /* Sewes */;
+			targetProxy = A34CE0A2271B7CE6003AE8C1 /* PBXContainerItemProxy */;
+		};
+		A34CE0AD271B7CE6003AE8C1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A34CE087271B7CE4003AE8C1 /* Sewes */;
+			targetProxy = A34CE0AC271B7CE6003AE8C1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		A34CE091271B7CE4003AE8C1 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A34CE092271B7CE4003AE8C1 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		A34CE099271B7CE5003AE8C1 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A34CE09A271B7CE5003AE8C1 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A34CE0B3271B7CE6003AE8C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A34CE0B4271B7CE6003AE8C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A34CE0B6271B7CE6003AE8C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Y45CT9GWMC;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Sewes/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = mx.educacion.practica.sewes.Sewes;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A34CE0B7271B7CE6003AE8C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Y45CT9GWMC;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Sewes/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = mx.educacion.practica.sewes.Sewes;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		A34CE0B9271B7CE6003AE8C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Y45CT9GWMC;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = mx.educacion.practica.sewes.SewesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Sewes.app/Sewes";
+			};
+			name = Debug;
+		};
+		A34CE0BA271B7CE6003AE8C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Y45CT9GWMC;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = mx.educacion.practica.sewes.SewesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Sewes.app/Sewes";
+			};
+			name = Release;
+		};
+		A34CE0BC271B7CE6003AE8C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Y45CT9GWMC;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = mx.educacion.practica.sewes.SewesUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Sewes;
+			};
+			name = Debug;
+		};
+		A34CE0BD271B7CE6003AE8C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Y45CT9GWMC;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = mx.educacion.practica.sewes.SewesUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Sewes;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A34CE083271B7CE4003AE8C1 /* Build configuration list for PBXProject "Sewes" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A34CE0B3271B7CE6003AE8C1 /* Debug */,
+				A34CE0B4271B7CE6003AE8C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A34CE0B5271B7CE6003AE8C1 /* Build configuration list for PBXNativeTarget "Sewes" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A34CE0B6271B7CE6003AE8C1 /* Debug */,
+				A34CE0B7271B7CE6003AE8C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A34CE0B8271B7CE6003AE8C1 /* Build configuration list for PBXNativeTarget "SewesTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A34CE0B9271B7CE6003AE8C1 /* Debug */,
+				A34CE0BA271B7CE6003AE8C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A34CE0BB271B7CE6003AE8C1 /* Build configuration list for PBXNativeTarget "SewesUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A34CE0BC271B7CE6003AE8C1 /* Debug */,
+				A34CE0BD271B7CE6003AE8C1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		A34CE094271B7CE4003AE8C1 /* Sewes.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				A34CE095271B7CE4003AE8C1 /* Sewes.xcdatamodel */,
+			);
+			currentVersion = A34CE095271B7CE4003AE8C1 /* Sewes.xcdatamodel */;
+			path = Sewes.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = A34CE080271B7CE4003AE8C1 /* Project object */;
+}
