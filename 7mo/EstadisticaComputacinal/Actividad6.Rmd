@@ -1,0 +1,110 @@
+---
+title: 'Actividad 6'
+author: "Aldair Gándara Hernández & Emmanuel Garduño Tellez"
+date: "22/10/2021"
+output: 
+  html_document: 
+    toc: yes
+    theme: lumen
+    number_sections: yes
+    highlight: textmate
+---
+# PROBLEMA: Método de aceptación y rechazo para generar variables aleatorias
+
+
+Librerias a usar en nuestro problema
+
+```{r}
+library(dplyr)
+```
+
+
+
+## función de densidad de probabilidad de la variable aleatoria graficada
+
+Función de probabilidad:
+
+$$f_{x}(x)=  (\frac{2x}{e^x})^2\mathbb{I}_{[0,\infty]}(x)$$
+
+```{r}
+fx <- function(x) ((2*x)/exp(x))^2
+x  <- seq(0,6,0.001)
+plot(x,fx(x),type="l",col="blue",lwd=2,xlim=c(0,6))
+gx <- function(x) exp(-x)
+
+
+```
+
+## método de aceptación y rechazo para obtener una muestra aleatoria de tamaño 10000
+Consideremos a:
+$$ g(x) = e^{-x}\mathbb{I}_{[0,\infty]}(x)$$
+$$X \sim Gamma(\alpha,\lambda) f(x;\alpha,\lambda)= \frac{\lambda^{\alpha}}{\lceil(\alpha)} $$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+plot(x,fx(x)/gx(x),type = "l", col="red")
+
+c <- max((((2*x)/exp(x))^2)/(exp(-x))); c
+
+```
+
+```{r}
+n<- 10000
+k<- 0   # contador para aceptar valores
+j<- 0  # contador de iteraciones necesarias para generar las "n" variables
+y<- numeric(n)
+
+while(k< n){
+  u= runif(1)
+  j= j+1  
+  x= rexp(1)     # v.a de g(x)~exp(1)
+  if((((2*x)/exp(x))^2)/(c*exp(-x)) > u){   # comparo con f(x)/cg(x)
+    k= k+1  # acepto x
+    y[k]= x   
+  }    
+}		
+
+j
+```
+
+```{r}
+# a) Verificacion: grafica
+alpha  <-3
+landa <-2
+hist(y,probability = T,col="gray50")  # histograma de las variables simuladas
+curve(dgamma(x,alpha,landa),col="darkblue", lwd=2, add=TRUE, yaxt="n")   # curva teorica
+
+```
+
+```{r}
+# b) Verificacion: media y varianza teoricos vs muestrales
+mean(y); alpha/lambda   # promedio muestral y teorico
+var(y); alpha/(lambda*lambda)   # varianza muestral y teorica
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

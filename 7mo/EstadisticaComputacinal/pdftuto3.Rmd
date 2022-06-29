@@ -1,0 +1,1151 @@
+---
+title: "Tutorial3"
+author: "Emmanuel Garduño Téllez"
+date: "Est Comutacional"
+output: 
+  html_document: 
+    toc: yes
+    highlight: textmate
+    theme: lumen
+    number_sections: yes
+  pdf_document:
+    toc: yes
+subtitle: Analisis descriptivo de datos
+header-includes:
+  \renewcommand{\contentsname}{Contenido}
+---
+
+#personalizar nuestra seccion
+
+```{r setup, include=TRUE}
+
+options(digits=3,papersize = "letter")  
+# https://stat.ethz.ch/R-manual/R-devel/library/base/html/options.html
+
+
+# Opciones globales en graficas
+par(mar=c(5.1,5,4.1,2.1),font=3,family="sans",bg="yellow")   
+
+```
+# Problema a estudiar
+
+Una empresa quiere introducir un programa de estímulos para su personal. Debe hacerlo lo más justo posible para evitar disgustos y un ambiente pesado entre los empleados. La información que ha recabado es de una muestra aleatoria de 200 empleados.
+
+* Antiguedad: antigüedad en años
+* Hora extra: horas extra trabajadas en el año
+* Sexo: 1-mujer, 2-hombre
+* Cursos: número de cursos de capacitación en un año
+* Incapacidad: días de incapacidad
+* Aptitudes: índice de aptitudes y capacidades
+* Escolaridad: 0-bachillerato, 1-licenciatura sin título, 2-licenciatura con título, 3-posgrado
+* Salarios: salario anual en dólares
+* Edad: edad en años del trabajador
+
+
+## Lectura y manejo de datos
+
+Antes de realizar el análisis estadístico más adecuado es conveniente revisar:
+
+1. Que la información de todas las variables sea completa
+2. Que nuestra elección esté de acuerdo con el tipo de variable y su escala de medición para ¡no meter la pata!
+
+```{r, include=TRUE}
+setwd("C:/Users/Emman/Documents/CCH-N} FES-A/fessaa/FES/7mo semestre/Temas Selectos de Estadistica")
+getwd()
+datos1 <- read.table("./DATA/Empleados.txt",header=TRUE,row.names=1)
+
+head(datos1)    # ver los primeros 6 renglones del conjunto de datos
+tail(datos1)    # ver los ultimos 6 renglones del conjunto de datos
+dim(datos1)
+names(datos1)
+str(datos1)
+mode(datos1)
+
+# Exploremos algunas variables
+
+datos1$antiguedad
+datos1[,3] # da la columna 3
+
+datos1[3,] # da el renglon 3
+
+datos1$sexo  # da la columna 3
+
+datos1[1:10,3:6]  # para seleccionar una parte de los datos
+
+# Si llamamos a la variable por su nombre...
+#antiguedad  # habiamos llamado datos1$antiguedad
+
+#antiguedad*12
+
+# MARCA ERROR AL TEJER!
+
+# Solucion.....
+
+attach(datos1) # con el attach ya puedo accesar a los nombres de las variables
+
+antiguedad
+
+antiguedad*12
+
+# OJO: el problema con attach es que si manejo 2 o mas bases de datos distintas,
+# y estas comparten el mismo nombre de las columnas, R se hace bolas y no
+# sabra exactamente a que base de datos se refiere.
+
+#detach(datos1) # para decirle a R que ya NO usare esa base de datos
+
+# Datos faltantes?
+
+library(naniar)
+
+pct_miss(datos1)
+
+
+```
+
+
+## Tipo de variable y escala de medición
+
+Antes de realizar el análisis estadístico más adecuado es conveniente revisar:
+
+1. Que la información de todas las variables sea completa
+2. Que nuestra elección esté de acuerdo con el tipo de variable y su escala de medición para ¡no meter la pata!
+
+### Identificación de las variables
+
+Variable    | Tipo                   | Escala de medición
+------------|------------------------|--------------------
+Antigüedad  | cuantitativa/discreta  | razón
+Hora extra  | cuantitativa/discreta  | razon
+Sexo        | cualitativa            | nominal    
+Cursos      | cuantitativa/discreta  | razón
+Incapacidad | cuantitativa/discreta  | razon
+Aptitudes   | cuantitativa/continua  | intervalo
+Escolaridad | cualitativa            | ordinal
+Salarios    | cuantitativa/continua  | razón
+Edad        | cuantitativa/discreta  | razón
+
+## Análisis estadístico de las variables cualitativas
+
+### Sexo
+
+#### Análisis tabular y gráfico
+
+Basándonos en la distribución de frecuencias,
+
+```{r}
+# Tabla de frecuencias
+
+(tabla_sexo <- table(sexo))  # tabla de frecuencias absolutas
+
+(tablar_sexo <- prop.table(tabla_sexo)) # tabla de frecuencias relativas
+
+# otra forma de obtener las marginales:
+
+(f.relativa_sexo<- c(sum(sexo==1)/length(sexo),sum(sexo==2)/length(sexo)))
+
+```
+
+En resumen:
+
+```{r}
+# Tabla de frecuencias completa
+
+tabla.frec_sex<- matrix(cbind(tabla_sexo[1],tabla_sexo[2],
+                              sum(tabla_sexo), tablar_sexo[1],tablar_sexo[2],sum(tablar_sexo)),
+                    byrow=T,nrow = 2,ncol=3)
+colnames(tabla.frec_sex)<- c("Mujer","Hombre","Totales")
+rownames(tabla.frec_sex)<- c("fi","pi")
+tabla.frec_sex
+```
+
+Observamos que en esta empresa hay más empleados que empleadas. De los primeros hay 119 personas que constituyen el 59.5% del total.
+
+Hacemos una gráfica para ver la distribución de los empleados (por género) en esta empresa:
+
+```{r}
+
+# Diagrama de barras
+barplot(tabla_sexo,names.arg=c("Mujer","Hombre"),col=c(3,32),
+        ylim=c(0,140))
+
+abline(h=tabla_sexo,col=c("magenta","blue"),lwd=2)  # dibuja las lineas horizontales
+title("Diagrama de barras - Sexo \n (Frecuencias Absolutas)")
+
+barplot(tablar_sexo,names.arg=c("M","H"),col=3:4,ylim=c(0,0.6))
+title("Diagrama de barras - Sexo \n (Frecuencias Relativas)")
+
+# Diagrama Circular
+
+par(mfrow=c(1,2))
+pie(tabla_sexo,labels=paste(c("M","H"),tabla_sexo,sep=": "),col=5:6,radius=1)
+title("Diagrama de pastel - Sexo \n (Frecuencias absolutas)")   # \n para escribir en otro renglon
+
+pie(tablar_sexo,labels=paste(c("M","H"),tablar_sexo,sep=": "),col=15:16,radius=1)
+title("Diagrama de pastel - Sexo \n (Frecuencias relativas)")
+
+```
+
+De la gráfica de barras y circular se observa que, en efecto, hay diferencias entre el número de empleados y empleadas que laboran en esta empresa. Vale la pena analizar estadísticamente si esto es así.
+
+```{r}
+
+# Comparacion entre la proporcion de mujeres y la proporcion de hombres.
+
+n_muj<- tabla_sexo[1]
+n_hom<- tabla_sexo[2]
+   
+prop.test(x=c(n_muj, n_hom), n=c(200,200), conf.level=0.90)
+
+```
+
+De acuerdo con el intervalo de confianza para la diferencia de proporciones se concluye que SÍ hay diferencia entre el número de empleados y empleadas, de hecho $p_{muj}-p_{hom}<0$; así que la proporción de mujeres si es estadísticamente inferior a la correspondiente de los hombres (como lo muestran las gráficas).
+
+***NOTA: # ¿Tiene sentido la siguiente grafica?
+
+```{r}
+hist(sexo,breaks=0:2)   # eje vertical es la frecuencia absoluta
+hist(sexo,breaks=0:2,probability=TRUE)  # eje vertical es la frecuencia relativa
+```
+
+
+#### Medidas descriptivas
+
+Sólo puede obtenerse la **moda**.
+
+```{r}
+
+# install.packages(modeest)
+library(modeest)    # "genefilter" es una dependencia que NO esta disponible para R 3.6.0
+
+# Otra paqueteria
+# install.packages(modes)
+# library(modes)   # no disponible en R 4.0.0
+
+# Variable nominal
+mfv(sexo)     # most frequent value
+mode(sexo)    # NO!
+
+# modes(sex)  # library(modes) 
+
+summary(sexo)   # no tiene interpretacion
+
+```
+
+### Escolaridad
+
+#### Análisis tabular y gráfico
+
+Basándonos en la distribución de frecuencias,
+
+```{r}
+# Tabla de frecuencias
+
+(tabla_esc <- table(escolaridad))  # tabla de frecuencias absolutas
+
+(tablar_esc <- prop.table(tabla_esc)) # tabla de frecuencias relativas
+
+```
+
+En resumen:
+
+```{r}
+# Tabla de frecuencias completa
+
+tabla.frec_esc<- matrix(cbind(tabla_esc[1],tabla_esc[2],
+                              tabla_esc[3], tabla_esc[4],
+                              sum(tabla_esc),
+                              tablar_esc[1],tablar_esc[2],
+                              tablar_esc[3], 
+                              tablar_esc[4], sum(tablar_esc)),
+                    byrow=T,nrow = 2,ncol=5)
+colnames(tabla.frec_esc)<- c("B","L(st)","L(ct)","P","Totales")
+rownames(tabla.frec_esc)<- c("fi","pi")
+tabla.frec_esc
+```
+
+Observamos que en esta empresa hay 117 emplead@s con licenciatura SIN título y representan el 58.5% del total. La diferencia entre los que sólo tienen el bachillerato y licenciatura CON título es pequeña (y veremos sí es significativa). Definitivamente casi no hay emplead@s con posgrado. 
+
+Hacemos una gráfica para ver la distribución de los empleados (por escolaridad) en esta empresa:
+
+```{r}
+
+# Diagrama de barras
+barplot(tabla_esc,names.arg=c("B","L(st)","L(ct)","P"),
+        col=c(3,32,2),ylim=c(0,140))
+
+# Diagrama Circular
+
+pie(tablar_esc,labels=paste(c("B","L(st)","L(ct)","P"),
+                            tablar_esc,
+                            sep=": "),col=rainbow(4),radius=1)
+title("Diagrama de pastel - Escolaridad \n (Frecuencias relativas)")
+
+```
+
+De la gráfica de barras y circular se observa que, en efecto, hay diferencias entre el nivel educativo de los empleado(a)s. Vale la pena analizar estadísticamente si esto es así.
+
+```{r}
+
+# Comparacion entre la proporcion de mujeres y la proporcion de hombres.
+
+n_bach<- tabla_esc[1]
+n_lct<- tabla_esc[3]
+   
+prop.test(x=c(n_bach, n_lct), n=c(200,200), conf.level=0.90)
+
+
+```
+
+Basándonos en el valor-p, NO se rechaza H0 por lo que $p_{bach}-p_{lct}=0$ y por consiguiente no hay evidencia estadística suficiente para decir que la proporción de emplead@s con licenciatura CON título es diferente a la correspondiente con bachillerato.
+
+#### Medidas descriptivas
+
+Sólo tienen sentido: **moda** y **mediana (o cualquier porcentil)**
+
+1. Moda:
+
+```{r}
+mfv(escolaridad)
+
+```
+
+Los emplead@s con licenciatura SIN titulo son los que más laboran en esta empresa
+
+2. Mediana
+
+```{r}
+
+median(escolaridad)
+
+quantile(escolaridad,prob=c(0.10,0.25,0.5,0.75))
+
+```
+
+El 10% de los emplead@s tienen a lo más bachillerato. Así que el 90% restante tienen educación superior. WOW!
+
+El 75% de los emplead@s tienen a lo más licenciatura SIN título, por lo que el 25% restante ya tienen el título o poseen un posgrado.
+
+
+## Análisis estadístico de las variables cuantitativas
+
+### Cursos
+
+#### Análisis tabular y gráfico
+
+Se trata de una variable discreta. Así que podemos presentar su resumen mediante una distribución de frecuencias como la correspondiente a una variable cualitativa.
+
+```{r}
+
+# Tabla de frecuencias
+
+(tabla_cursos <- table(cursos))  # tabla de frecuencias absolutas
+
+(tablar_cursos <- prop.table(tabla_cursos)) # tabla de frecuencias relativas
+
+```
+
+En resumen
+
+```{r}
+# Tabla de frecuencias completa
+
+tabla.frec_cursos<- matrix(cbind(tabla_cursos[1],tabla_cursos[2],
+                                tabla_cursos[3], tabla_cursos[4],
+                                tabla_cursos[5], tabla_cursos[6],
+                                tabla_cursos[7], tabla_cursos[8],
+                                sum(tabla_cursos),
+                                tablar_cursos[1], tablar_cursos[2],
+                                tablar_cursos[3], tablar_cursos[4],
+                                tablar_cursos[5], tablar_cursos[6],
+                                tablar_cursos[7], tablar_cursos[8],
+                                sum(tablar_cursos)),
+                                byrow=T,nrow = 2,ncol=9)
+colnames(tabla.frec_cursos)<- c("0","1","2","3","4","5","6","9","Totales")
+rownames(tabla.frec_cursos)<- c("fi","pi")
+tabla.frec_cursos
+```
+
+Veamos la distribución del número de cursos para los emplead@s de esta empresa.
+
+```{r}
+par(mfrow=c(1,2))
+barplot(tabla_cursos)  # frecuencias absolutas
+title("Diagrama de barras (Cursos) \n (Frecuencias absolutas)")
+
+barplot(tablar_cursos,col=c(10:20))   # frecuencias relativas
+title("Diagrama de barras (Points) \n (Frecuencias relativas)")
+```
+
+¿Qúe pasa si a la ingenua graficamos un histograma?
+
+```{r}
+hist(cursos,breaks=-1:9,plot=FALSE)  # las clases son: [-1,0] (0,1],...,(8,9])
+# OJO: las clases (breaks) los defini asi para que se pareciera al diagrama
+# de barras y poderlo comparar.
+
+hist(cursos,breaks=-1:9,probability=TRUE)
+```
+
+El perfil en ambas gráficas es "idéntico", sólo que en el segundo caso las barras están pegadas. ¿Será correcto?
+
+Podemos pensar que los valores de esta variable discreta son como las categorías y, por consiguiente, el diagrama de pay sería adecuado:
+
+```{r}
+par(mfrow=c(1,2))
+pie(tabla_cursos,labels=paste(c("0","1","2","3","4","5","6","9"),
+                              tabla_cursos,sep=": "),col=palette("Alphabet"),radius=1)
+title("Diagrama de pay - Cursos \n (Frecuencias absolutas)")
+
+pie(tablar_cursos,labels=paste(c("0","1","2","3","4","5","6","9"),
+                               tablar_cursos,sep=": "),col=topo.colors(8),radius=1)
+title("Diagrama de pay - Cursos \n (Frecuencias relativas)")
+
+```
+
+
+Por tratarse de una variable cuantitativa es posible representar sus valores mediante un diagrama de puntos (*dotplot o strip chart*).
+
+````{r}
+dotchart(cursos,labels=row.names(datos1),cex=0.8,groups = as.factor(sexo),#forzar a sexo a ser categorias, si son, pero no lo sabe R
+         xlab="Número de cursos",main="Diagrama de puntos")  # Cleveland dot plot
+````
+
+Mejor tratemos con un subconjunto:
+
+````{r}
+datos2<- subset(datos1,cursos>4); datos2
+dotchart(datos2$cursos,labels=row.names(datos2),cex=0.8,xlab="Número de cursos",main="Diagrama de puntos")  # Cleveland dot plot
+````
+¿Y si mejor seleccionamos al azar?
+
+````{r}
+#si queremos que sea lo mismo poner una semilla
+datos3<- sample(datos1$cursos,size=60,replace = F); datos3 #replace F  es igual a sin remplazo
+dotchart(datos3,cex=0.8,xlab="Numero de cursos",main="Diagrama de puntos")  # Cleveland dot plot
+
+# Muestreo aleatorio de TODO el conjunto de datos
+
+#sample(datos1,10,replace = F)  # no es correcto!
+
+datos4<- datos1[sample(nrow(datos1),30,replace = F),]; datos4  
+head(datos4)
+dotchart(datos4$cursos,labels=row.names(datos4),cex=0.8,xlab="Numero de cursos",main="Diagrama de puntos")  # Cleveland dot plot
+
+````
+
+Otro tipo de gráfica de puntos conocida como diagrama de puntos
+
+````{r}
+
+#install.packages("BHH2")
+library(BHH2)
+
+dotPlot(na.omit(datos4$cursos),main="Diagrama de puntos (muestra aleatoria)",xlab="Número de puntos",pch=16)
+
+````
+
+Analicemos el diagrama de tallo y hojas. Recordemos que en este diagrama se divide a cada observación en dos partes: tallo y hoja.
+
+1. Cuando hay punto decimal, éste se usa como separador.
+2. El problema es cuando se tienen muchos dígitos a la derecha del separador (hojas). Esto es poco práctico, por lo que sólo se considera un decimal, ¿cómo escogemos este único decimal?
+
+**El argumento "scale" permite modificar la longitud del diagrama y con ello tener este único decimal**. Por ejemplo:
+
+````{r}
+
+stem(datos1$cursos, scale=0.1)  
+
+````
+
+Los valores que se leen son: 0.0,0.1,0.5,0.6,0.9
+
+````{r}
+stem(datos1$cursos, scale=1) #no se usa mucho en ciendia de datos
+````
+
+
+Los valores que se leen son: 0,1,2,3,4,5,6,9
+
+**COMENTARIO: En el primer caso, el valor exacto se pierde. Sin embargo, esto no es relevante para este tipo de gráfica/tabla. Sólo interesa identificar alrededor de cual valor se concentran más las observaciones y el perfil que muestra esta distribución.**
+
+Finalmente analizamos el diagrama de caja y brazos:
+
+````{r}
+
+boxplot(cursos,horizontal=T,col="yellow") 
+````
+
+Se observa que hay una persona con más de 8 cursos y es un *outlier*. 
+Claramente la distribución de cursos es asimétrica hacia la derecha.
+El 50% de los emplead@s ha tomado a lo más 2 cursos; mientras que el 75% ha llevado hasta 3 cursos. Veamos de quién se trata para premiarlo.
+
+````{r}
+
+datos1[datos1$cursos>8,]
+
+datos1[datos1$cursos>8,]$salario
+  
+````
+
+#### Medidas descriptivas
+
+1. Moda
+
+````{r}
+library(fdth)
+mfv(cursos) #Usa libreria obligatoriamente
+````
+
+2. Media
+
+````{r}
+
+mean(cursos)
+
+````
+
+3. Cuantiles y Amplitud intercuartílica
+
+```{r}
+
+quantile(cursos, probs = c(0.25,0.50,0.75))
+IQR(cursos)
+
+````
+
+4. Varianza 
+
+````{r}
+
+var(cursos); sd(cursos)
+
+````
+
+5. Error medio
+
+````{r}
+
+mean(abs(na.omit(cursos)-mean(na.omit(cursos))))   # error medio (media)
+mean(abs(cursos-median(cursos)))  # error medio (mediana)
+mean(abs(cursos-mfv(cursos)))  # error medio (moda) OJO!!!
+
+````
+
+
+6. Coeficiente de variación
+
+````{r}
+
+c.v<- sd(cursos)/mean(cursos); c.v # tenemos poca variavilidad
+
+````
+
+7. Asimetría y curtosis
+
+A veces es difícil identificar si la distribución de frecuencias es asimétrica o simétrica mediante un histograma o un diagrama de barras. Para ello existen medidas estadísticas que nos permiten saber si el perfil es simétrico o no; además si es un perfil "picudo" o "plano". Estas medidas son: **coeficiente de asimetría** y **coeficiente de curtosis**.
+
+
+a) Coeficiente de asimetría
+
+````{r}
+n<- length(cursos)   # longitud del vector
+mu3<- sum((cursos-mean(cursos))^3)/(n-1)
+s3<- sd(cursos)^3
+j3<- mu3/s3; j3    
+
+# Usando R
+
+library(agricolae) #se puede con libreria momentos
+(j3_a<- skewness(cursos)) 
+(j3_b<- moments::skewness(cursos))
+
+````
+
+b) Coeficiente de curtosis
+
+````{r}
+mu4<- sum((cursos-mean(cursos))^4)/(n-1)
+s4<- sd(cursos)^4
+j4<- mu4/s4; j4    
+
+# Usando R
+
+library(agricolae) #numero 3 distribucion normal
+(j4_a<- kurtosis(cursos)+3)  # da el exceso de curtosis  
+(j4_b<- moments::kurtosis(aptitudes))  
+````
+
+O bien, podemos resumir parte de esta información en:
+
+````{r}
+
+fivenum(cursos) # minimum, lower-hinge, median, upper-hinge, maximum)
+
+summary(cursos)
+
+````
+
+***
+***
+
+**COMENTARIO SOBRE "HINGES"**: es similar a los cuartiles. En conjuntos grandes de datos, la diferencia entre ellos es muy pequeña. Según la definición de Tukey los "hinges" son:
+
+a) Hinges inferior: es la mediana de la mitad inferior de todos los valores a la izquierda de la mediana de los datos.
+
+b) Hinges superior: es la mediana de la mitad superior de todos los valores a la derecha de la mediana de los datos 
+
+Ejemplo 1: n=20 observaciones
+La mediana está en la posición 10.5. La mitad inferior comprende las 
+posiciones 1 hasta 10; mientras que la superior desde la 11 hasta 20.
+
+El "lower hinge" es la mediana de la mitad inferior y sería la posición 5.5. 
+
+El "upper hinge" es la mediana de la mitad superior y sería la posición 5.5 (comenzando desde la posición 11), por lo que a final de cuentas será la posición 15.5.
+
+Ejemplo 2: n=21 observaciones
+
+La mediana está en la posición 11. La mitad inferior comprende las 
+posiciones 1 hasta 11; mientras que la superior desde la 11 hasta 21.
+
+El "lower hinge" es la mediana de la mitad inferior y sería la posición 6. 
+
+El "upper hinge" es la mediana de la mitad superior y sería la posición 6 (comenzando desde la posición 11), por lo que a final de cuentas será la posición 16.
+
+***
+***
+
+### Salario
+
+#### Análisis tabular y gráfico
+
+Se trata de una variable continua, así que si hacemos lo siguiente:
+
+````{r}
+
+table(salario)
+
+barplot(salario)
+
+````
+
+**COMENTARIO: Se observa que no es util para este tipo de variable representarlo asi, por eso conviene hacer una tabla de frecuencias usando INTERVALOS DE CLASE. **
+
+En ![](Rlogo.png){width=3%} tenemos dos opciones para construir una tabla de frecuencias para datos agrupados.
+
+a) Usando la funcion "hist".
+
+*Sugerencia: revisar primero los valores mínimo y máximo*
+
+````{r}
+#imagen del logo en sea, guardado en el directorio de trabajo
+range(salario)   # minimo y maximo
+
+````
+
+Con ellos, ahora sí definimos los *breaks* del histograma:
+
+````{r}
+
+hist_sal <- hist(datos1$salario,breaks=seq(15600,49000,2500),plot=F)
+
+summary(hist_sal)   
+
+````
+
+Construimos la correspondiente tabla de frecuencias
+
+````{r}
+n <- length(hist_sal$breaks)
+tab_sal <- cbind(hist_sal$breaks[-n],hist_sal$breaks[-1],
+                 hist_sal$counts,
+                 hist_sal$counts/sum(hist_sal$counts),
+                 cumsum(hist_sal$counts),
+                 cumsum(hist_sal$counts/sum(hist_sal$counts)))
+dimnames(tab_sal)[[2]]<-c("Linf","Lsup","f","fr","F","Fr")
+print(tab_sal)
+
+````
+
+b) Usando el paquete "fdth"
+
+````{r}
+library(fdth)
+(tabla_cont<- fdt(salario,breaks="Scott",start=15600,end=49000,h=2500,right=T))
+
+(tabla_cont<- fdt(salario,breaks="Sturges",right=T))
+
+(tabla_cont<- fdt(salario,breaks="Sturges",start=15600,end=49000,h=2500,right=T))
+
+(tabla_cont<- fdt(salario,breaks="FD",right=T))
+
+````
+
+Hacemos el histograma:
+
+````{r}
+par(mfrow=c(1,2))
+hist(salario,col=rainbow(6), prob=T)
+hist(salario,col=rainbow(6), prob=F)
+
+````
+
+El histograma muestra el perfil de la distribución de probabilidad que mejor describe a la variable. Para ello, resulta conveniente dibujar el polígono de frecuencias. De hecho, 
+
+````{r}
+hist(salario,probability=T,col="grey50")  # histograma cuyo eje vertical esta en escala
+# de "probabilidades".
+
+lines(density(salario),lwd=2,col="blue")   # curva de densidad de probabilidad
+
+
+
+````
+
+`````{r}
+
+par(mfrow=c(1,2))
+library(MASS)
+frequency.polygon(salario,nclass = nclass.freq(salario))
+
+library(UsingR)
+simple.freqpoly(salario,col=heat.colors(6))
+
+````
+
+**NOTA: si se requieren intervalos desiguales para observar ciertos detalles de interés**
+
+
+````{r}
+
+hist_uneq<- hist(salario,breaks = quantile(salario, 0:10 / 10),col="gray")  # usa los cuantiles 
+
+hist(salario,breaks=c(15600,seq(27000,32000,800),37690,49000))   # intervalos en puntos arbitrarios
+
+````
+
+Aprovechando la tabla de frecuencias con intervalos de clase y su histograma, vale la pena revisar la siguiente gráfica: **ojiva**
+
+````{r}
+library(agricolae)
+ogive.freq(hist_sal,main="Ojiva (salario)",xlab="Límite superior de
+           la clase",ylab="Pi (%)")   
+# "ogive.freq" requiere al histograma como objeto 
+
+````
+
+
+¿Cómo se interpreta esta gráfica?
+
+```{r}
+
+# Haremos una grafica interactiva para Markdown. 
+# Primero debemos crear un data.frame con las columnas de la tabla de # frecuencias (requisito de la funcion "plot_ly") 
+
+library(plotly)
+
+h<- data.frame(cbind(tab_sal[,2],tab_sal[,6])); h
+plot_ly(data=h,x= ~tab_sal[,2],y= ~tab_sal[,6], 
+        marker = list(size = 10, color="red"),
+        type = 'scatter', mode = 'lines')%>%
+  layout(title = 'Ojiva (Salario)', 
+         xaxis = list(title = 'Límite superior'), 
+         yaxis = list(title = 'Pi'),
+         shapes = list(
+                  # linea vertical 
+                  list(type = "line", x0 = 0, x1 = 0, 
+                      y0 = 0, y1 = 1, yref = "paper"),
+                  # linea horizontal 
+                    list(type = "line", x0 = 0, x1 = 50000, 
+                            y0 = 1, y1 = 1, xref = "paper")))
+
+````
+
+Veamos otras gráficas que ya habíamos realizado en el caso discreto.
+
+````{r}
+
+dotPlot(salario,pch=16,col=5)   # libreria(BHH2)
+
+stem(salario)
+
+boxplot(salario,horizontal = T,col="lightgreen")
+
+# Mejor...
+
+library(plotly)
+plot_ly(datos1,x = ~salario, type = "box")
+
+````
+
+
+
+#### Medidas descriptivas
+
+1. Moda
+
+¿Qué resultado muestra lo siguiente?
+
+````{r}
+
+mfv(salario)
+
+````
+
+¿Tiene sentido para una variable continua?
+
+Nótese que si las observaciones se redondean es posible que encontremos un valor que se repita varias veces. El programa R lo que hace es redondear hacia abajo (floor) y con ello localiza 
+la moda. Esto no es adecuado.
+
+Si conocemos la distribución de probabilidad para la variable "salario", entonces basta con derivarla para tener el valor que maximiza su probabilidad. ¿Y si no, qué hacemos?
+
+Respuesta: usamos su tabla de frecuencias
+
+````{r}
+
+# Habiamos visto que
+
+tabla_cont   # tabla de frecuencias para datos agrupados por intervalos de clase
+
+str(tabla_cont)    # para ver como debemos llamar a cada elemento
+which.max(tabla_cont$table$f)  # indica el renglon cuya frecuencia absoluta, f, es maxima
+
+
+tabla_cont$table$`Class limits`[which.max(tabla_cont$table$f)] # indica la CLASE MODAL
+
+````
+
+Comparamos los resultados y claramente son ¡MUY DISTINTOS!
+
+
+2. Media
+
+````{r}
+
+mean(salario)
+
+````
+
+3. Cuantiles y Amplitud intercuartílica
+
+```{r}
+
+quantile(salario, probs = c(0.25,0.50,0.75))
+IQR(salario)
+
+````
+
+4. Varianza 
+
+````{r}
+
+var(salario); sd(salario)
+
+````
+
+5. Error medio
+
+````{r}
+
+mean(abs(na.omit(salario)-mean(na.omit(salario))))   # error medio (media)
+mean(abs(salario-median(salario)))  # error medio (mediana)
+mean(abs(salario-mfv(salario)))  # error medio (moda) OJO!!!
+
+````
+
+
+6. Coeficiente de variación
+
+````{r}
+
+c.v<- sd(salario)/mean(salario); c.v
+
+````
+
+7. Asimetría y curtosis
+
+a) Coeficiente de asimetría
+
+````{r}
+n<- length(salario)   # longitud del vector
+mu3<- sum((salario-mean(salario))^3)/(n-1)
+s3<- sd(salario)^3
+j3<- mu3/s3; j3    
+
+# Usando R
+
+library(agricolae)
+(j3_a<- skewness(salario)) 
+(j3_b<- moments::skewness(salario))
+
+````
+
+b) Coeficiente de curtosis
+
+````{r}
+mu4<- sum((salario-mean(salario))^4)/(n-1)
+s4<- sd(salario)^4
+j4<- mu4/s4; j4    
+
+# Usando R
+
+library(agricolae)
+(j4_a<- kurtosis(salario)+3)  # da el exceso de curtosis  
+(j4_b<- moments::kurtosis(salario))  
+````
+
+
+
+O bien, podemos resumir parte de esta información en:
+
+````{r}
+
+fivenum(salario) # minimum, lower-hinge, median, upper-hinge, maximum)
+
+summary(salario)
+
+````
+
+
+## Comparación y asociación entre variables
+
+### Variable nominal/ordinal vs variable cuantitativa: COMPARACION ENTRE VARIABLES
+
+Para comparar el comportamiento de estas variables conviene usar un diagrama de caja-brazos. Este diagrama se usa para la variable cuantitativa, la cualitativa solo sirve para separar el análisis por casos.
+
+Escogemos las variables *escolaridad* y *salario*.
+
+El diagrama de caja-brazos de *salario* se muestra en la sección 2.4.2.1. Es claro que hay asimetría hacia la izquierda ($\gamma_{3}=-0.143$) pero con esta gráfica aún no podemos saber si la *escolaridad* juega un papel relevante. Para ello hacemos el siguiente diagrama:
+
+````{r}
+
+# Ahora, analicemos esta variable por escolaridad
+
+sal_bach<- datos1[escolaridad==0,]$salario
+
+boxplot(sal_bach,horizontal = T)
+
+boxplot(salario~escolaridad,col="yellow") 
+
+# Otra manera
+par(mfrow=c(1,1))   # ventana original
+library(paletteer)
+library(ggthemes)
+
+boxplot(salario[escolaridad=="0"],salario[escolaridad=="1"],
+        salario[escolaridad=="2"],salario[escolaridad=="3"],
+        col=paletteer_c("ggthemes::Sunset-Sunrise Diverging", 4),names=c("bachillerato","licenciatura sin título","licenciatura con título","posgrado"))
+
+# Otra manera
+
+library(ggplot2)
+ggplot(datos1, 
+       aes(x = as.factor(escolaridad), 
+           y = salario)) +
+  geom_boxplot() +
+ labs(title = "Salary distribution by rank")
+````
+
+El salario no es el mismo para todos los niveles de escolaridad. Las medianas de los niveles Lst, Lct y posgrado, se parecen. ¿Qué tal si hacemos una prueba de hipótesis para ver esto?
+
+````{r}
+
+# Prueba NO PARAMETRICA para comparacion de medianas
+
+wilcox.test(salario[escolaridad=="1"],
+        salario[escolaridad=="2"], alternative= "two.sided", mu=0, paired= F, conf.level= 0.97)
+
+````
+
+De acuerdo con el *valor-p* se concluye que no hay evidencia estadística suficiente para pensar que la diferencia de medianas no es igual a cero, en otras palabras, la mediana de los salarios para los emplead@s con licenciatura sin título es igual a la correspondiente con licenciatura con título (¡ganas lo mismo con el "papel" que sin él!)
+
+Y si comparamos a los que tienen posgrado:
+
+````{r}
+
+# Prueba NO PARAMETRICA para comparacion de medianas
+
+wilcox.test(salario[escolaridad=="1"],
+        salario[escolaridad=="3"], alternative= "two.sided", mu=0, paired= F, conf.level= 0.97)
+
+````
+
+¡Ufff! A la empresa no le importa que tengamos un posgrado porque me pagará igual que a la persona que sólo tiene el 100% de créditos de la carrera.
+
+Veamos esto:
+
+````{r}
+
+library(ggplot2)
+
+# Distribucion del salario 
+
+Nivel.educacion<- as.factor(escolaridad)
+num.empleado<- seq(1:200)
+ggplot(datos1, aes(x = num.empleado, 
+                     y = salario, 
+                     color=Nivel.educacion)) +
+  geom_point() +
+  labs(title = "Salario de acuerdo a la escolaridad")
+
+# O bien,
+
+colors <- c("red", "green", "blue", "orange")
+plot(num.empleado,salario,col = colors[Nivel.educacion], 
+     pch = as.numeric(Nivel.educacion))
+legend("bottomright", legend = c("B", "Lst","Lct","P"),
+       lwd = 3, col = c("red", "green", "blue", "orange"))
+
+
+````
+
+De acuerdo a las gráficas anteriores, no se observan grupos salariales. 
+
+Más sobre el salario:
+
+````{r}
+
+plot(antiguedad, salario, col=colors[Nivel.educacion], pch = 16)
+legend("bottomright", legend = c("B", "Lst","Lct","P"),
+       lwd = 3, col = c("red", "green", "blue", "orange"))
+
+````
+
+````{r}
+# calculate mean salary for each rank
+library(dplyr)
+plotdata <- datos1 %>%
+  group_by(escolaridad) %>%
+  summarize(sal_prom = mean(salario))
+
+# plot mean salaries
+ggplot(plotdata, 
+       aes(x = escolaridad, 
+           y = sal_prom)) +
+  geom_bar(stat = "identity")
+
+````
+ 
+````{r}
+ 
+library(scales)
+ggplot(plotdata, 
+       aes(x = factor(escolaridad,
+                      labels = c("Bachillerato",
+                                 "Licenciatura sin título",
+                                 "Licenciatura con título","Posgrado")), 
+                      y = sal_prom)) +
+  geom_bar(stat = "identity", 
+           fill = "cornflowerblue") +
+  geom_text(aes(label = dollar(sal_prom)), 
+            vjust = -0.25) +
+  scale_y_continuous(breaks = seq(0, 50000, 10000), 
+                     label = dollar) +
+  labs(title = "Salario promedio por nivel educativo", 
+       subtitle = "Empresa X",
+       x = "",
+       y = "")
+       
+````       
+
+Para estudiar la relación entre una variable que agrupa (cualitativa) y una cuantitativa podemos usar: *strip plot*
+
+````{r}
+
+# Graficamos la distribucion de los salarios por nivel educativo  usando strip plots
+
+ggplot(datos1, 
+       aes(y = escolaridad, 
+           x = salario)) +
+  geom_point() + 
+  labs(title = "Distribución de los salarios por nivel educativo")
+
+
+
+````
+
+
+Es difícil comprender lo que sucede, mejor:
+
+````{r}
+
+library(scales)
+ggplot(datos1, 
+       aes(y = factor(escolaridad,labels=c("Bachillerato","Licenciatura\n sin título","Licenciatura\ncon título","Posgrado")), 
+           x = salario,color = Nivel.educacion)) +
+  geom_jitter() + 
+  scale_x_continuous(label = dollar) +
+  labs(title = "Distribución de los salarios por nivel educativo")+
+  labs(y= "Educación", x = "Salario (USD)")+
+  theme_minimal() 
+
+
+````
+
+
+### Variable cuantitativa vs variable cuantitativa: ASOCIACION ENTRE VARIABLES
+
+````{r}
+round(cor(datos1[c(1,2,4:6,8:9)]),digits = 2) 
+
+````
+Observamos que las relaciones más débiles se dan entre: antiguedad-horas extra; antiguedad-cursos; antiguedad-incapacidad; antiguedad-aptitudes, horasextra-cursos, cursos-salario, cursos-edad, incapacidad-aptitudes, incapacidad-edad, edad-aptitudes.
+
+De hecho, estas parejas de variables tienen coeficientes cercanos a cero. Así que podríamos sospechar que **no hay relación lineal** entre ellas. Para verificar esto, hagamos una prueba de hipótesis:
+
+````{r}
+
+cor.test(antiguedad, horasextra, alternative="two.sided", method="pearson")
+
+cor.test(antiguedad, cursos, alternative="two.sided", method="pearson")
+
+cor.test(antiguedad, incapacidad, alternative="two.sided", method="pearson")
+
+cor.test(antiguedad, aptitudes, alternative="two.sided", method="pearson")
+
+cor.test(cursos, horasextra, alternative="two.sided", method="pearson")
+````
+
+Gráficamente...
+
+````{r}
+plot(datos1[c(1,2,4:6,8:9)])   # matriz de graficas de dispersion
+
+````
+
+### Variable cuantitativa vs variable cuantitativa: COMPARACION ENTRE VARIABLES
+
+Comparamos tanto el *salario* como las *aptitudes*:
+
+````{r}
+
+cv_aptitudes<- sd(aptitudes)/mean(aptitudes); cv_aptitudes   
+cv_salario<- sd(salario)/mean(salario); cv_salario    
+
+````
+
+¿Dónde hay más variabilidad en cuanto al *salario* de acuerdo con la *escolaridad*?
+
+````{r}
+bachillerato<- datos1[escolaridad=="0",]  
+lic.st<- datos1[escolaridad=="1",]  
+lic.ct<- datos1[escolaridad=="2",] 
+posgrado<- datos1[escolaridad=="3",] 
+
+(cv_bachillerato<- sd(bachillerato$salario)/mean(bachillerato$salario))
+
+(cv_lic.st<- sd(lic.st$salario)/mean(lic.st$salario))
+
+````
+
+
+
+
+
+
+
+
+
+
+
+
+

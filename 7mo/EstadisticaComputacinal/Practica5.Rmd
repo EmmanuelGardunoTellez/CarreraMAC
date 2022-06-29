@@ -1,0 +1,802 @@
+---
+title: "Practica 5: "
+author: "Emmanuel Garduño Téllez"
+date: "Estadistica Comutacional"
+output: 
+  html_document: 
+    toc: yes
+    highlight: textmate
+    theme: lumen
+    number_sections: yes
+  pdf_document:
+    toc: yes
+subtitle: Analisis descriptivo de datos
+header-includes:
+  \renewcommand{\contentsname}{Contenido}
+---
+
+#personalizar nuestra seccion
+
+```{r setup, include=TRUE}
+
+options(digits=3,papersize = "letter")  
+# https://stat.ethz.ch/R-manual/R-devel/library/base/html/options.html
+
+
+# Opciones globales en graficas
+par(mar=c(5.1,5,4.1,2.1),font=3,family="sans",bg="yellow")   
+
+```
+TUTORIAL 5: MODELOS PROBABILÍSTICOS O ESTADÍSTICOS
+PROF. ELUZABETH MARTINEZ
+ESTADISTICA COMPUTACIONAL
+
+
+Ver: https://rmarkdown.rstudio.com/authoring_basics.html
+
+
+Un modelo probabilístico o estadístico es la forma que puede tomar un conjunto de datos (se supone que éstos provienen de muestreos aleatorios).
+
+Un **modelo estadístico** es un tipo de modelo matemático que usa la probabilidad para describir de manera adecuada un conjunto de datos. 
+
+Un modelo estadístico queda especificado por un conjunto de ecuaciones que relacionan diversas variables aleatorias, y en las que pueden aparecer otras variables no aleatorias.
+
+# Modelos basados en distribuciones
+
+Ver Tutorial 4.
+
+# Modelos de regresión
+
+Un modelo estadístico de regresión es una expresión simbólica en forma de igualdad o ecuación que se emplea en todos los diseños experimentales y en la regresión para indicar los diferentes factores que modifican la variable de respuesta.
+
+---
+  
+  *Problema:* 
+  
+  *¿La inteligencia de una persona está determinada por el tamaño del cerebro basado en el conteo obtenido a partir de escaneos por resonancia magnética, MRI (cuentas/10,000) o por el de su cuerpo (estatura-pulgadas, peso-libras)?*
+  
+  Repasemos cómo estimar e interpretar el **modelo de regresión lineal simple**.
+
+
+
+## Modelo de regresión lineal simple
+
+```{r include=TRUE,echo=TRUE}
+setwd("C:/Users/Emman/Documents/CCH-N} FES-A/fessaa/FES/7mo semestre/Temas Selectos de Estadistica")
+inteligencia<- read.table("./DATA/Datos cerebroFile.txt",header=T,row.names=1);inteligencia
+attach(inteligencia)
+names(inteligencia)
+
+plot(IQ,Cerebro,pch=16,xlab="Tamaño del cerebro",ylab="IQ")  # pueden cambiar el regresor X
+
+plot(IQ,Altura,pch=16,xlab="Altura",ylab="IQ")
+
+plot(IQ,Peso,pch=16,xlab="Peso",ylab="IQ")
+
+```
+
+
+### Estimación del modelo simple por MLE
+
+Ver notas de clase para los estimadores.
+
+```{r include=TRUE,echo=TRUE}
+X<- Cerebro  # aqui cambien por otro regresor y observen los resultados
+Y<- IQ
+
+n<- length(X)
+
+beta.hat<- (sum((X-mean(X))*(Y-mean(Y))))/sum((X-mean(X))^{2}); beta.hat
+alpha.hat<- mean(Y)-beta.hat*mean(X); alpha.hat
+sigma2.hat<- (1/n)*sum((Y-alpha.hat-beta.hat*X)^{2}); sigma2.hat   
+
+# Usando la funcion en R
+
+plot(Cerebro,IQ, pch=16,xlab="Tamaño cerebro",ylab="IQ")  # ponerlo aqui de lo contrario marca error!
+
+fit1<- lm(Y~X, data = inteligencia); fit1; summary(fit1)
+abline(fit1,col="red")
+
+fit2<- lm(Y~X-1, data = inteligencia); fit2; summary(fit2)
+abline(fit2,col="blue")
+
+```
+
+
+>*INTERPRETACION COEFICIENTE $\beta_{0}$*
+  
+  >*Modelo con intercepto: en PROMEDIO, el IQ sube 4.652 independientemente del tamaño del cerebro.*
+  
+  
+  >*INTERPRETACION COEFICIENTE $\beta_{1}$*
+  
+  >*Modelo con intercepto: por cada unidad adicional del tamaño del cerebro, el IQ cambia (por el signo positivo sube) en PROMEDIO, 1.177*
+  
+  
+  ### Inferencia estadística sobre el modelo simple
+  
+  #### Significancia estadística de los coeficientes del modelo
+  
+  De la tabla de resultados analizamos los valores-p para cada coeficiente 
+y realizamos el contraste de hipótesis:
+  
+  H0: coeficiente=0 (no significativo) 
+
+Ha: coeficiente distinto de cero (significativo)
+
+```{r include=TRUE,echo=TRUE}
+
+library(broom)
+glance(fit1)   
+
+```
+
+
+#### Estimación de intervalos de confianza para los regresores
+
+```{r include=TRUE,echo=TRUE}
+
+ic1<- confint(fit1, level=0.95); ic1
+
+```
+
+>*INTERPRETACION INTERVALO DE CONFIANZA PARA $\beta_{0}$*
+
+>*Podemos afirmar con un nivel de confianza del 95% que, independientemente del tamaño del cerebro (medido en cuentas/10000), el IQ en PROMEDIO estará entre -83.99 y 93.30 (es claro, que los valores negativos no tienen sentido en este problema).*
+
+
+>*INTERPRETACION INTERVALO DE CONFIANZA PARA $\beta_{1}$* 
+
+>*Podemos afirmar con un nivel de confianza del 95% que, ante un aumento del tamaño del cerebro (medido en cuentas/10000), el IQ en PROMEDIO subirá (por el signo positivo) entre 0.2019 y 2.1512*
+
+### Diagnóstico del modelo: Verificación de supuestos en R
+
+a) Residuos vs valores ajustados (predichos). IDEAL: puntos aleatorios
+
+b) Grafica QQ. IDEAL: La distribución de los ERRORES debería caer sobre la recta 
+para decir que se distribuyen normalmente.
+
+c) Escala-Localización. IDEAL: puntos aleatorios. No patrones.
+
+d) Distancia de Cook: indica cuáles puntos tienen una fuerte influencia sobre la regresión ("leverage points"). 
+
+```{r include=TRUE,echo=TRUE}
+
+plot(fit1)
+
+```
+
+
+>*COMENTARIOS SOBRE LAS GRÁFICAS*
+
+>*1. La primera gráfica muestra un patrón, lo que significa que el modelo lineal propuesto no explica el comportamiento del IQ. Además "Mónica", "Laura" y "Linda" parecen afectar al modelo.*
+
+>*2. Parece que no se puede suponer normalidad en los residuos, quizá por las mismas tres personas ya mencionadas.*
+
+>*3. La varianza de los residuos puede considerarse constante porque no se observa que los residuos sigan un patrón.*
+
+>*4. Todas las observaciones están dentro de la distancia de Cook, tener cuidado con "Laura", "Manuel" y "Max" que podrían afectar al modelo.*
+
+
+### Diagnóstico del modelo: Verificación de supuestos 'manual'
+
+#### Linealidad 
+
+```{r include=TRUE,echo=TRUE}
+par(mfrow = c(1,1))
+plot(X,Y,pch=16,xlab="Tamaño del cerebro",ylab="IQ")
+abline(fit1,col=4,lwd=2)
+legend("topleft",legend = paste("R-Cuadrado Ajustado=",
+                      round(summary(fit1)$adj.r.squared,2)),cex=.7)
+
+```
+
+
+#### Independencia de residuos (Prueba Durbin-Watson)
+
+Criterio:
+
+1. Si d = 2 indica que no hay autocorrelación. 
+El valor de d siempre está entre 0 y 4, siendo lo "normal" entre 1.5 y 2.5. Si se tiene un valor fuera de ese intervalo, es motivo de preocupación.
+
+2. Si la estadística de Durbin-Watson es sustancialmente menor que 2, hay evidencia de correlación serial positiva. 
+
+3. Si d> 2, los términos de error sucesivos son, en promedio, muy diferentes en valor el uno del otro, es decir, correlacionado negativamente. En las regresiones, esto puede implicar una subestimación del nivel de significancia estadística.
+
+La hipótesis estadística para autocorrelación de los residuos es:
+
+H0: autocorrelación es cero 
+
+```{r include=TRUE,echo=TRUE}
+library(lmtest)
+Y.dwtest<- dwtest(fit1,data=Y); Y.dwtest   
+result.autocor<- Y.dwtest$statistic; result.autocor
+
+```
+
+>*COMENTARIO: Si consideramos un riesgo de equivocarnos $\alpha$ muy pequeño, digamos, 1%, entonces al compararlo con el valor-p, concluimos que la autocorrelación de los residuos es cero. Así que no hay suficiente evidencia estadística como para preocuparnos por este problema. Es claro, que si $\alpha > 0.05$, esto cambiará. De cualquier manera, este modelo aún no es el mejor.*
+
+
+#### Errores constantes (homoscedasticidad)
+
+**Ver gráfica: residuos vs valores ajustados**
+
+
+Útil para detectar si el modelo de regresión presenta:
+
+a) una relación no lineal entre la variable respuesta y los predictores. Una tendencia horizontal en la gráfica indica la ausencia de patrones no lineales entre la respuesta y los predictores (que es lo esperado en un modelo lineal)
+
+b) heteroscedasticidad (heterogeneidad de la varianza). Un modelo mostrará heteroscedasticidad cuando los residuos no se distribuyen igualmente a lo largo de los valores ajustados.
+
+Patrones en la gráfica residuos vs valores ajustados
+
+1) Dispersión irregular o en forma de abanico: varianza NO constante
+2) Curvilíneo: falta incluir un término de orden superior
+3) Aumento/disminución de puntos: outlier
+4) Predominio de residuos negativos o positivos: outlier
+5) Un punto lejos del cero: outlier
+6) Un punto muy lejos de la dirección de los demás: punto influyente
+
+```{r include=TRUE,echo=TRUE}
+plot(fit1,1:1, main="Homoscedasticidad en los errores",col.main="blue",cex.main=.9)
+
+library(lmtest)
+bptest(fit1)   # Prueba de Breusch-Pagan
+
+```
+
+>*COMENTARIO: Basándonos en la gráfica de residuos y en el valor-p concluimos que los residuos son HOMOSCEDÁSTICOS.*
+
+
+#### Normalidad de los residuos
+
+```{r include=TRUE,echo=TRUE}
+hist(fit1$residuals,main="Residuos modelo 1",cex.main=.9,col.main="blue")
+
+library(nortest)
+lillie.test(fit1$residuals)     
+
+```
+
+>*COMENTARIO: Basándonos en el valor-p de la prueba estadística se concluye que los residuos sí cumplen con el supuesto de normalidad. *
+
+En R existe una prueba estadística general para verificar los supuestos de la regresión:
+
+```{r include=TRUE,echo=TRUE}
+library(gvlma)
+valida_fit <- gvlma(fit1)    
+summary(valida_fit)
+
+```
+
+>*CONCLUSIÓN GENERAL DEL MODELO SIMPLE*
+
+>*El modelo lineal que explica a la respuesta IQ en términos de la covariable "Tamaño del cerebro", no es un modelo adecuado porque la variabilidad del IQ es apenas explicada en un 12% ($R^2=0.119$). Aún cuando los supuestos de la regresión se han validado, es claro que hace falta introducir otras covariables y analizar unas observaciones que pueden comprometer los resultados del modelo (ver las gráficas de los residuos).*
+
+***
+
+## Modelo de regresión lineal múltiple
+
+### Relación entre las variables
+
+```{r include=TRUE,echo=TRUE}
+pairs(inteligencia,pch=20)
+
+```
+
+>*COMENTARIOS:*
+
+>* Se aprecia una relación lineal entre algunas covariables, por ejemplo, peso vs altura. Aunque también se observa entre el cerebro vs altura y cerebro vs peso. Esto puede ocasionar un problemita. 
+
+>* La variable respuesta, IQ, no parece tener una relación lineal con las covariables por separado. 
+
+
+Por curiosidad analicemos los siguientes grupos de IQ:
+
+```{r include=TRUE,echo=TRUE}
+
+grupo <- NA
+grupo[IQ >= 70 & IQ <= 89] <- 1   # abajo del promedio
+grupo[IQ >= 90 & IQ <= 109] <- 2   # promedio
+grupo[IQ >= 110 & IQ <= 119] <- 3   # arriba del promedio
+grupo[IQ >= 120] <- 4   # superior 
+
+pairs(inteligencia,col = c("red", "cornflowerblue", "purple","darkgreen")[grupo],
+      pch = c(8,18,1,4)[grupo])
+
+```
+
+
+>*COMENTARIO: En la gráfica anterior se observan algunas diferencias en el tamaño del cerebro, la altura y el peso entre los tres grupos de inteligencia. Quizá valga la pena considerarlo en algún modelo.*
+
+Estudiemos la distribución de probabilidad de cada variable involucrada. 
+*NOTA: La línea roja es la curva normal teórica y la línea azul es la densidad empírica.*
+
+
+```{r include=TRUE,echo=TRUE}
+library(psych)
+multi.hist(x = inteligencia, dcol = c("blue", "red"), dlty = c("dotted", "solid"),lwd=c(2,1),
+           main = c("IQ","Cerebro","Altura","Peso"))
+
+```
+
+>*COMENTARIO: En ninguno de los casos se observa que la distribución normal es la que mejor describe a los datos.*
+
+Unas gráficas interesantes y ¡bonitas!
+
+```{r include=TRUE,echo=TRUE}
+library(GGally)
+ggpairs(inteligencia)
+
+ggpairs(inteligencia, upper = list(continuous = "smooth"), 
+                      lower = list(continuous = "blank"),
+                      diag = list(continuous = "densityDiag"))
+
+```
+
+>*CONCLUSIONES*
+
+>*1. Las variables que tienen una mayor relación lineal con el IQ son: el tamaño del cerebro (0.378)*
+
+>*2. Las variables predictoras que están más relacionadas entre sí son: peso-altura (0.7), cerebro-altura (0.59).*
+
+**Por lo que posiblemente no sea útil introducir todos estos predictores en el modelo.**
+
+
+### Un primer modelo
+
+#### Estimación del modelo múltiple: OLS 
+
+```{r include=TRUE,echo=TRUE}
+# Hacemos la estimacion manual de los coeficientes del modelo:
+
+Y<- matrix(inteligencia$IQ,nrow=length(inteligencia$IQ)); Y
+X<- matrix(c(rep(1,nrow(inteligencia)), inteligencia$Cerebro, inteligencia$Altura, inteligencia$Peso),
+           nrow=nrow(inteligencia), byrow=F); X
+
+XtX<- t(X)%*%X
+XtY<- t(X)%*%Y
+
+betahat_vector<- solve(XtX)%*%XtY; betahat_vector
+
+# Extraemos cada coeficiente del vector:
+
+(beta0.hat<- betahat_vector[1,1])
+(beta1.hat<- betahat_vector[2,1])
+(beta2.hat<- betahat_vector[3,1])
+(beta3.hat<- betahat_vector[4,1])
+
+# Error estandar de los coeficientes (manual)
+
+n<- nrow(inteligencia)
+SSE<- t(Y)%*%Y-(t(betahat_vector)%*%t(X)%*%Y)  # suma de los cuadrados de los errores en la regresion
+
+# El estimador insesgado de la varianza sigma^2 es:
+s2<- SSE/(n-4)    # son 4 parametros los que se estiman
+
+errormodelo<- sqrt(s2); errormodelo   # error estandar del modelo de regresion
+
+error_beta0<- sqrt(solve(XtX)[1,1]*s2) # error estandar coeficiente beta0
+error_beta1<- sqrt(solve(XtX)[2,2]*s2) # error estandar coeficiente beta1
+error_beta2<- sqrt(solve(XtX)[3,3]*s2) # error estandar coeficiente beta2
+error_beta3<- sqrt(solve(XtX)[4,4]*s2) # error estandar coeficiente beta3
+
+c(error_beta0,error_beta1,error_beta2,error_beta3)
+```
+
+#### Estimación del modelo múltiple usando R 
+
+```{r include=TRUE,echo=TRUE}
+model.inteligencia1<- lm(IQ~Cerebro+Altura+Peso, data = inteligencia)  # con todos los predictores
+summary(model.inteligencia1)
+
+# Error estandar de los coeficientes en R (manual)
+
+sqrt(diag(vcov(model.inteligencia1)))
+```
+
+>*INTERPRETACION DEL PRIMER MODELO* 
+  
+>1. El modelo con todas las variables introducidas como predictores tiene un $R^2$ bajo (0.23), es capaz de explicar el 23% de la variabilidad observada en el IQ.
+
+>2. El valor-p del primer modelo es significativo (0.0072) por lo que se puede aceptar que el modelo no es por azar, al menos uno de los coeficientes parciales de regresión es distinto de 0. La variable "peso" NO es significativa, lo que es un indicativo de que podría no contribuir al modelo.
+
+### En búsqueda de un nuevo modelo: selección de los mejores predictores (regresores)
+
+```{r include=TRUE,echo=TRUE}
+step(object = model.inteligencia1, direction = "both", trace = 1)  # stepwise mixto
+
+```
+
+>*CRITERIO:* Se elige el modelo con menor AIC.
+
+
+> Así que, en este caso, sólo se requieren dos regresores: cerebro y altura
+
+
+  
+### Un segundo modelo
+
+#### Estimación de los parámetros
+
+```{r include=TRUE,echo=TRUE}
+model.inteligencia2<- lm(IQ~Cerebro+Altura, data = inteligencia)
+summary(model.inteligencia2)
+
+```
+
+>*INTERPRETACION DEL SEGUNDO MODELO* 
+  
+>1. El modelo con las variables introducidas como predictores, cerebro y altura, tiene un $R^2$ bajo (0.25), es capaz de explicar el 25% de la variabilidad observada en el IQ. ¡Mejoró un poquitito!
+
+>2. El valor-p del segundo modelo es significativo (0.0022) por lo que se puede aceptar que el modelo no es por azar, al menos uno de los coeficientes parciales de regresión es distinto de 0. El intercepto NO es significativo, pero debe dejarse porque ante la ausencia de las otras variables, siempre se tendrá una medición de IQ.
+
+**¿Por qué no hemos podido mejorar el modelo?**
+
+#### Diagnóstico del modelo 
+
+```{r include=TRUE,echo=TRUE}
+
+library(gvlma)
+valida_model2 <- gvlma(model.inteligencia2)  
+summary(valida_model2)
+
+# Graficas de diagnostico
+plot(model.inteligencia2)
+
+```
+
+>*COMENTARIOS SOBRE LAS GRÁFICAS*
+
+>*1. Gráfica residuos vs valores ajustados: Mónica, Silvia y Mariana presentan diferencias mayores, por lo que quizá estas observaciones "tengan algún problema".*
+
+>*2. Normalidad residuos: Mónica, Silvia y Mariana se "alejan" de la normalidad.*
+
+>*3. Gráfica localización-escala: No se observa un patrón, eso significa que los residuos son homoscedásticos. Los casos de Mónica, Silvia y Mariana son observaciones que se deben analizar.*
+
+>*4. Gráfica residuos vs leverage: todos los residuos están dentro de la distancia de Cook, así que no hay problema. Aunque debemos revisar individualmente las observaciones de Mónica, Laura y Silvia.*
+
+
+
+#### Multicolinealidad 
+
+Uno de los supuestos adicionales que debe satisfacer el modelo de regresión múltiple es el de **no multicolinealidad**.
+
+No existe un método estadístico concreto para determinar la existencia de
+este problema, sin embargo, se han desarrollado numerosas reglas prácticas:
+
+1. Si el coeficiente de determinación $R^2$ es alto pero ninguno de los
+predictores resulta significativo, hay indicios de colinealidad.
+
+2. Calcular una matriz de correlación entre las covariables.
+
+3. Generar un modelo de regresión lineal simple entre cada uno de los
+predictores frente al resto.
+
+4. Tolerancia y Factor de Inflación de la Varianza (VIF):
++ VIF > 10 es causa de preocupación
++ VIF es sustancialmente mayor que 1 entonces la regresión puede verse perjudicada.
++ Tolerancia = 1/VIF debajo de 0.1 indica un problema serio.
++ Tolerancia debajo de 0.2 indica un problema potencial.
+
+```{r include=TRUE,echo=TRUE}
+
+library("Hmisc")
+rcorr(as.matrix(inteligencia))  # los datos deben estar como matriz
+
+# Una gráfica más
+
+library(corrplot)
+corrplot(cor(inteligencia))   # correlograma
+
+# Criterio VIF
+library(car)
+vif(model.inteligencia2)
+tol<- 1/vif(model.inteligencia2); tol
+
+```
+
+>*CONCLUSIÓN: En efecto, hay covariables que están muy relacionadas entre sí y como el $VIF>1$, entonces la regresión puede verse afectada.
+
+
+#### Identificación de valores atípicos o influyentes en la regresión
+
+Analicemos las variables por separado:
+
+```{r include=TRUE,echo=TRUE}
+boxplot.matrix(as.matrix(inteligencia),use.cols = T)
+
+```
+
+>*COMENTARIO: Ninguna de las variables tiene observaciones atípicas por separado.*
+
+
+I. Criterio para detectar influyentes: $|dfbeta|>\sqrt{\frac{2}{n}}$
+
+```{r include=TRUE,echo=TRUE}
+
+n<- nrow(inteligencia)
+abs(dfbeta(model.inteligencia2))>sqrt(2/n)
+```
+
+>*CONCLUSIONES:*
+
+>*1. Toby y Jerry son las únicas observaciones que NO influyen en el INTERCEPTO.*
+
+>*2. Tomás y Mónica son las observaciones que más influyen en el predictor CEREBRO.*
+
+>*3. Mónica, Luz y Linda son las observaciones que más influyen en el predictor ALTURA.*
+
+
+II. Criterio para detectar observaciones con alto "leverage": $h_{ii}>3\frac{k}{n}$
+
+```{r include=TRUE,echo=TRUE}
+# En R se les conoce tambien como "hatvalues".
+
+lev<- hatvalues(model.inteligencia2)
+plot(lev, ylab="Leverage")
+
+
+
+k<- 1+2  # numero de parametros estimados en el modelo 2 (intercepto+2 predictores)
+regla_leverage<- 3*(k/n); regla_leverage   
+
+# 2.5*(k+1)/n   # criterio alternativo
+
+cbind(lev>regla_leverage)
+
+
+cooks.distance(model.inteligencia2)
+```
+
+>*CONCLUSIÓN: no hay observaciones con alto **leverage**.*
+
+```{r include=TRUE,echo=TRUE}
+summary(influence.measures(model.inteligencia2))
+
+# Col. 1 indica el indice de las observaciones potencialmente influyentes.
+# Col. 2-3 (dfb's) proporcionan las observaciones potencialmente influyentes sobre cada uno de los coeficientes del modelo.
+# Col. 4 (dffit) identifica las observaciones influyentes segun el estadistico DFFITS.
+# Col. 5 (cov. r) muestra las observaciones potencialmente influyentes según el estadistico COVRATIO.
+# Col. 6 (cook.d) distancia de Cook.
+# Col. 7 presenta las observaciones que pueden resultar influyentes segun los "leverages".
+
+# OJO: Los leverages (hat) varían entre 0 (indicando que el caso no tiene influencia en absoluto) y 1 (indicando que ese caso tiene influencia completa sobre el modelo).
+
+# Buscamos valores el doble o triple que ((k+1)/n) para considerarlos como influyentes donde k= # de regresores; n= # de observaciones. 
+
+# Para la distancia de Cook se considera que valores mayores que 1 pueden ser 
+# causa de preocupacion. 
+
+
+influencePlot(model.inteligencia2)
+
+# Monica es la observacion que se considera atipica.
+
+# En R existe otra paqueteria que nos ayuda graficamente a encontrar estas observaciones atipicas.
+library(olsrr)
+ols_plot_cooksd_bar(model.inteligencia2)   # Monica(13) y Laura(21) son outliers
+ols_plot_cooksd_chart(model.inteligencia2)
+
+# DFBETA mide la diferencia en la estimacion de cada parametro con y sin el punto influyente.
+# Hay un valor de DFBETA para cada observacion, es decir, hay n observaciones y k parametros, por lo que hay n*k DFBETAs. 
+# En general, valores grandes de DFBETAS indican observaciones que son influyentes en la estimacion de cierto parametro.
+
+ols_plot_dfbetas(model.inteligencia2)
+
+ols_plot_resid_stud(model.inteligencia2)
+
+ols_plot_resid_lev(model.inteligencia2)
+
+ols_plot_resid_stud_fit(model.inteligencia2)
+
+```
+
+
+III. Criterio para detectar outliers
+
+```{r include=TRUE,echo=TRUE}
+
+outlierTest(model.inteligencia2)  # library(car)
+
+```
+
+
+### Un modelo final (sin observaciones atípicas ni influyentes)
+
+```{r include=TRUE,echo=TRUE}
+remove1= row.names(inteligencia["Monica",])    # atipico e influyente
+library(Hmisc)  # contiene el operador logico %nin%
+#   "%nin%" = Negate("%in%")   # alternativa para negar el operador logico %in%
+
+datos_nuevos1<- inteligencia[rownames(inteligencia) %nin% remove1, ] 
+  
+model.inteligencia3<- lm(IQ~Cerebro+Altura, data = datos_nuevos1)
+summary(model.inteligencia3)
+
+```
+
+>*CONCLUSIÓN: Todos los coeficientes son estadísticamente significativos y la bondad de ajuste del modelo mejoró ($R^2=0.37$)*
+
+
+```{r include=TRUE,echo=TRUE}
+
+
+plot(model.inteligencia3)
+
+
+# Ahora eliminamos a la segunda observacion influyente
+
+remove2= row.names(inteligencia[c("Monica","Laura"),])    # influyentes
+datos_nuevos2<- inteligencia[rownames(inteligencia) %nin% remove2, ]; datos_nuevos2 
+
+model.inteligencia4<- lm(IQ~Cerebro+Altura, data = datos_nuevos2)
+summary(model.inteligencia4)
+
+# El intercepto deberia ser eliminado del modelo 4.
+
+model.inteligencia4.1<- lm(IQ~Cerebro+Altura-1, data = datos_nuevos2)
+summary(model.inteligencia4.1)
+
+plot(model.inteligencia4.1)
+
+# Parece que la normalidad de los residuos no se satisface. Verifiquemos mediante un contraste de hipotesis.
+
+library(nortest)
+lillie.test(model.inteligencia4$residuals)   # hay normalidad
+lillie.test(model.inteligencia4.1$residuals) # hay normalidad aunque es mejor en el modelo 4
+
+```
+
+
+#### Comparación entre modelos
+
+```{r include=TRUE,echo=TRUE}
+anova(model.inteligencia1,model.inteligencia2)  # todos los datos
+
+# Conclusion: El haber eliminado a la variable Peso (df=-1) nos lleva a un valor-p=0.99 (NO RECHAZO H0 y el coeficiente es cero). En otras palabras, hicimos bien en haberla eliminado y el Modelo 2 es mejor. 
+
+anova(model.inteligencia3)                      # sin Monica
+
+anova(model.inteligencia4,model.inteligencia4.1) # sin Monica ni Laura
+
+```
+
+
+>*CONCLUSIÓN: El haber eliminado al intercepto nos lleva a un valor-p=0.09 que podríamos considerar "alto" y en consecuencia NO RECHAZAR H0 y decir que el coeficiente es cero. Esto es, que el modelo 4.1 es mejor.*
+
+```{r include=TRUE,echo=TRUE}
+modelo_final<- model.inteligencia4.1
+
+# Interpretacion: IQ= 2.6801 Cerebro-1.9668 Altura   (Altura en pulgadas)
+
+# Por cada unidad adicional del tamaño del cerebro, el IQ aumenta en promedio 2.68 (manteniendo la variable altura fija).
+# Mientras que si se mantiene el tamaño del cerebro fijo, por cada pulgada que disminuye la altura de una persona,el IQ baja en 1.96.
+
+ic_modelo_final<- confint(modelo_final)
+
+anchuraic_cerebro<- ic_modelo_final[1,2]-ic_modelo_final[1,1] #anchura ic para Cerebro
+
+anchuraic_altura<- ic_modelo_final[2,2]-ic_modelo_final[2,1] #anchura ic para Altura
+
+```
+
+
+### ¿Qué pasa si hay datos faltantes?
+
+Nuestros datos del cerebro están completos, pero para estudiar la "sensibilidad" del modelo, agregaremos un cierto porcentaje de observaciones faltantes.
+
+````{r}
+
+library(missMethods)
+library(naniar)
+
+set.seed(102021)
+
+ds_mcar <- delete_MCAR(inteligencia, 0.25, c("IQ", "Cerebro", "Altura", "Peso"))  # elimina el 25%
+
+# Creamos un nuevo conjunto de datos
+
+inteligencia_miss<- data.frame( cbind(ds_mcar$IQ,ds_mcar$Cerebro,ds_mcar$Altura,ds_mcar$Peso))
+colnames(inteligencia_miss)<- c("IQ_m","Cerebro_m","Altura_m","Peso_m")
+
+str(inteligencia_miss)
+
+vis_miss(inteligencia_miss)  
+
+````
+
+#### Modelo de regresión múltiple con datos faltantes
+
+```{r include=TRUE,echo=TRUE}
+
+model.miss<- lm(IQ_m~Cerebro_m+Altura_m, data = inteligencia_miss)
+
+summary(model.miss)
+
+```
+
+Para que la comparación sea justa, usamos el modelo completo: *model.inteligencia2*.
+
+En el modelo completo, encontramos que $R^2=0.2546$ con un error estándar de 19.51 y en el modelo con datos faltantes $R^2=0.264$ con un error estándar de 21.65.
+
+Si es claro que la presencia de datos faltantes perjudica la estimación de los parámetros del modelo.
+
+Veamos rápidamente qué pasa con el diagnóstico:
+
+````{r}
+
+par(mfrow=c(1,2))
+plot(model.inteligencia2,1)
+plot(model.miss,1)
+
+````
+
+El *model.miss* muestra un peor comportamiento en los residuos.
+
+````{r}
+
+par(mfrow=c(1,2))
+plot(model.inteligencia2,2)
+plot(model.miss,2)
+
+````
+
+El *model.miss* tiene menos observaciones y falla en la normalidad de los residuos.
+
+````{r}
+
+par(mfrow=c(1,2))
+plot(model.inteligencia2,3)
+plot(model.miss,3)
+
+````
+
+
+Claramente los residuos en *model.miss* no son homoscedásticos. La varianza sube.
+
+
+````{r}
+
+par(mfrow=c(1,2))
+plot(model.inteligencia2,4)
+plot(model.miss,4)
+
+````
+
+### EXTRA: MODELO CON VARIABLE CUALITATIVA
+
+```{r include=TRUE,echo=TRUE}
+
+g<- as.factor(grupo)   # creado previamente
+datos2<- cbind(inteligencia,g); str(datos2)
+modelo1.grupo<- lm(IQ~Cerebro+Altura+g)
+summary(modelo1.grupo)
+anova(modelo1.grupo)
+anova(model.inteligencia2,modelo1.grupo)
+
+```
+
+De la salida anterior se tiene un valor-p~0, usando un nivel de significancia usual del 5% se concluye que hay evidencias para rechazar H0, es decir, la variable "Grupo" SÍ aporta información para el modelo y por lo tanto es una variable útil.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

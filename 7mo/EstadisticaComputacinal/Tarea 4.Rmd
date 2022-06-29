@@ -1,0 +1,193 @@
+---
+title: "Tarea 4"
+author: "Aldair Gándara Hernández & Emmanuel Garduño Tellez"
+date: "19/10/2021"
+output:
+  html_document:
+    toc: yes
+  pdf_document:
+    toc: yes
+---
+
+# MODELO PROBABILÍSTICO PARA LLUVIAS EN MÉXICO
+
+
+LECTURA DE DATOS
+
+```{r}
+library(knitr)
+setwd("D:/Documentos/Estadistica_Computacional")
+lluvias= read.table("lluvias.dat",sep="\t",row.names = 1,header=T)
+attach(lluvias)
+y= Precipitacion   # renombro la variable por comodidad
+
+# Graficamos los datos para "ver" el perfil que describen.
+hist(y,breaks=seq(0,2400,300),main= "Precipitacion anual en Mexico (2017)",
+     xlab="Precipitacion (mm)", col="purple")
+
+
+```
+
+## Estimación de Parámetros por Mínimos Cuadrados
+
+El método empleado para estimar los parámetros iniciales será por el Método de Mínimos Cuadrados, es decir, se hará una linealización de la función acumulativa de la forma: 
+
+$$ ln( -ln(1-\hat{F}(x))) = \alpha \ln(x) - \alpha ln(\beta) $$
+
+
+Primero ordenamos las observaciones de menor a mayor:
+
+```{r}
+
+N<-length(y)
+
+pre_ord<-sort(y); pre_ord
+
+```
+
+La $\hat{F}(x_{i})$ se estima dividiendo la posición $i$ entre el total de observaciones $n$.
+
+```{r}
+prob_acum<-function(t){
+  is<-seq(1, length(t), 1)
+  Fis<-is/length(t)
+  return(Fis)
+}
+
+F_t<-prob_acum(pre_ord)
+
+##Para eviatar indeterminaciones el último valor estimado es 1, lo cual provocará una indeterminación en los Logarrotmos, se redondea a:
+
+F_t[length(F_t)]=0.9999; F_t
+
+```
+
+Calculamos $X_{i} = ln(x_{i})$ y $Y_{i}=ln(-ln(1-\hat{F}(x)))$ y mostramos una primera gráfica:
+```{r}
+
+yi<-log(-log(1-F_t, base = exp(1)), base=exp(1)); yi
+
+xi<-log(pre_ord, base=exp(1)); xi
+
+plot(xi, yi, col="purple", type="p", main=" Y ~ X ", pch=19)
+
+
+```
+
+Para obtener la regresión lineal se hará de 2 formas: Por la función lm() de R y calculando ambos coeficientes de forma manual.
+
+```{r}
+#Forma 1:
+
+dats<-data.frame("X"=xi, "Y"=yi)
+
+reg<-lm(Y~X, data=dats); reg
+
+summary(reg)
+
+#Forma 2:
+
+a=(N*(sum(xi*yi))-sum(xi)*sum(yi))/(N*sum(xi*xi)-sum(xi)^2)
+
+b=(sum(xi*xi)*sum(yi)-sum(xi*yi)*sum(xi))/(N*sum(xi*xi)-sum(xi)^2)
+
+alfa_WE<-a
+print("Alfa"); alfa_WE
+
+beta_WE<-exp(-(b/alfa_WE))
+print("Beta"); beta_WE
+
+lambda_WE<-1/beta_WE
+print("Lambda"); lambda_WE
+
+```
+## Función log_verosimilitud
+
+Función de LOG_Verosimilitud de un Weibull:
+
+$$ \mathscr{L}(\beta, \alpha, \hat{x}) = n \ln(\alpha) - n \alpha \ln(\beta) + (\alpha -1)\sum_{i=1}^{n}\ln(x_{i}) - \sum_{i=1}^n (\frac{x_{i}}{\beta})^\alpha$$
+
+```{r}
+
+log_lik_wei<-function( parms){
+  
+  alfa=parms[1]
+  lambda=parms[2]
+  nn=length(y)
+  
+  llw=(nn*log(alfa, base = exp(1))) - (nn*alfa*log(1/lambda, base = exp(1))) +
+    ((alfa-1)*sum(log(y, base = exp(1)))) - 
+    sum((y*lambda)^alfa)
+  return(-llw)
+}
+
+lluvias_Wei<-optim(c(alfa_WE, lambda_WE), log_lik_wei); lluvias_Wei$par
+
+
+plot(density(y), col="blue", lwd=2, xlab="Precipitación (MM)", ylab="Densidad", main="")
+curve(dweibull(x, lluvias_Wei$par[1], 1/lluvias_Wei$par[2]), col="red", lwd=2, add=T)
+
+legend(x = "topright",         # Posición
+       legend = c("Weibull Ajustada", "Densidad por R"), # Textos de la leyenda
+       title = "DISTRIBUCIONES",
+       lty = c(1, 1),          # Tipo de líneas
+       col = c("red", "blue"),          # Colores de las líneas
+       lwd = 2) 
+
+```
+## Parámetros y sus Errores
+
+Para obtener los errores estandar de los parámetros se hará una prueba con la función *fitdist* la cual recibe como parámetros los valores previamente calculados y ofrece los errores estándar de los mismos, además de 4 gráficas que describen la distribución ajustada
+
+```{r}
+library(fitdistrplus)
+
+inicio<-list(shape=lluvias_Wei$par[1], scale= 1/lluvias_Wei$par[2])
+
+bondad1<-fitdist(y, "weibull", method = "mle", start = inicio, 
+                 optim.method="Nelder-Mead")
+plot(bondad1)
+
+print("Parámetros: "); bondad1$estimate
+
+print("Errores Estándar: "); bondad1$sd
+
+
+```
+## Histograma & Distribucion Ajustada
+
+```{r}
+
+hist(y,breaks=seq(0,2400,300),main= "Precipitacion anual en Mexico (2017)",
+     xlab="Precipitacion (mm)", col="lightblue", probability  = T)
+curve(dweibull(x, shape = bondad1$estimate[1], scale = bondad1$estimate[2]), 
+      col="red", lwd=3 , add=T)
+```
+
+## Comparación de Métodos
+
+Recuperando los Criterios de Información de Akaike y Bayesianos de los modelos Exponencial y Gamma del trabajo realizado en clase y obteniendo los de Weibull de la última prueba realizada:
+
+
+
+```{r}
+
+AIC_exp=500.5257
+BIC_exp=505.4572
+
+AIC_gamma=482.3427
+BIC_gamma=485.2742
+
+AIC_wei=bondad1$aic
+BIC_wei=bondad1$bic
+
+op_dist<-c(AIC_exp, AIC_gamma,AIC_wei, BIC_exp, BIC_gamma, BIC_wei)
+
+min(op_dist)
+```
+
+* El módelo mejor al problema fue el modelo Gamma ya que su AIC es menor a los demás criterios*
+
+
+
+

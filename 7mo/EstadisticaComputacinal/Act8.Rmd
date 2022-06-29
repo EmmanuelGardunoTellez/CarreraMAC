@@ -1,0 +1,166 @@
+---
+title: "Tarea 8"
+author: "Aldair Gándara Hernández & Emmanuel Garduño Tellez"
+date: "17/11/2021"
+output: 
+  html_document: 
+    toc: yes
+    theme: lumen
+    number_sections: yes
+    highlight: textmate
+---
+
+
+# Prueba de uniformidad e independencia del generador aleatorio
+
+Cargamos los datos
+```{r}
+setwd("C:/Users/Emman/Documents/CCH-N} FES-A/fessaa/FES/7mo semestre/Temas Selectos de Estadistica")
+rnd<- read.table("./DATA/aleatorios2.txt",header=F)
+attach(rnd)
+```
+
+
+## Construye una prueba de hipótesis de Kolmogorov-Smirnov con un nivel de significancia $\alpha$ = 0.02 para saber si la secuencia de números sigue una distribución uniforme.
+
+Primero ordenamos los números aleatorios ($RND_{i}$) y vemos cuantos son:
+```{r}
+sort(rnd$V1)
+dim(rnd)
+```
+Como vemos que son 70, calculamos su distribución acumulada de los números generados $F_{n}=\frac{i}{n}$ ($F(RND_{i})$).
+
+i es posición que ocupa el número aleatorio y n número de variables aleatorias
+
+```{r}
+frnd <- seq(0,1, length=71) #se pone 71 porque empieza con 0, se quita despues
+frnd[-1]
+```
+Se obtiene la diferencia entre $RND_{i}-F(RND_{i})$:
+```{r}
+absoluto <- abs(sort(rnd$V1)-frnd[-1])
+absoluto
+```
+Acomodamos en una tabla.
+
+```{r}
+KS <- data.frame(
+  "i" = 1:70,
+  "RND_i" = sort(rnd$V1),
+  "FRBD_I" = frnd[-1],
+  "RND_i-FRBD_I"=  absoluto
+  
+)
+KS
+```
+Sacamos el valor máximo de $RND_{i}-F(RND_{i})$:
+```{r}
+max(KS$RND_i.FRBD_I) 
+```
+
+Por la tabla "Test de Kolmogórov-Smirnov sobre bondad de ajuste" se obtiene con nivel de significancia $\alpha=0.02$ con $n=70$:
+$$\frac{1.52}{\sqrt{n}}$$
+
+```{r}
+1.52/sqrt(70) 
+```
+
+como $0.3278571 > 0.1816747$, entonces SI se puede rechazar la uniformidad de los números aleatorios, se puede verificar con k.test.
+```{r}
+ks.test(rnd,"punif",0,1)
+```
+
+## Construye una prueba de hip´otesis de corridas por arriba y por abajo del promedio con un nivel de significancia $\alpha$ = 0.02 para saber si la secuencia de números es independiente.
+
+Se obtiene una nueva sucesión binaria, según $r_{i}\leq0.5 \rightarrow r_{j}=0$ y  $r_{i}>0.5 \rightarrow r_{j}=1$:
+
+```{r}
+k<- 0 #contador
+n<- 70 #num de var aleatorias
+y<- numeric(n)  #asignamos el 0 y 1 parra las corridas
+while(k<n){
+  k=k+1
+  if(rnd$V1[k]<=0.5){
+    y[k]<- 0
+  } else {
+    y[k]<- 1
+  }
+}
+corridas <- data.frame(
+  "RND_i" = rnd$V1,
+  "0-1" = y
+  
+)
+corridas
+```
+
+El número esperado de corridas es $E=\frac{n+1}{2}$ y su frecuencia para cada longitud de corrida i es $FE_{i}=\frac{n-i+3}{2^{i+1}}$
+
+|Elementos          |Long. cadena|
+|-------------------|------------|
+|1 1                |2           |
+|0 0                |2           |
+|1 1                |2           |
+|0                  |1           |
+|1 1 1              |3           |
+|0                  |4           |
+|1 1 1 1            |3           |
+|0 0 0              |4           |
+|1 1 1 1            |4           |
+|0                  |1           |
+|1 1                |2           |
+|0 0                |2           |
+|1 1 1 1 1 1        |6           |
+|0 0                |2           |
+|1 1                |2           |
+|0                  |1           |
+|1                  |1           |
+|0                  |1           |
+|1 1 1 1 1 1 1 1 1 1|10          |
+|0                  |1           |
+|1 1                |2           |
+|0                  |1           |
+|1 1 1 1 1 1 1 1    |8           |
+|0                  |1           |
+|1 1 1 1 1 1 1      |7           |
+
+En la siguiente tabla se resume toda la información para el cálculo de la $\chi^{2}$
+
+```{r}
+i <- 1:10
+FEi <- (n-i+3)/(2^(i+1))
+FO<- c(8,8,2,3,0,1,1,1,0,1)
+FT<- ((FEi-FO)^2)/FEi
+
+E <- (n+1)/2; E #Corridas teoricas
+sum(FO) #Total de corridas
+corridasTabla <- data.frame(
+  "Long" = i,
+  "FE" = FEi,
+  "FO" = FO,
+  "FT" = FT
+)
+corridasTabla
+```
+$$FT= \frac{(FE-FO)^{2}}{FE}$$
+De la tabla anterior la suma de FT 
+```{r}
+sum(corridasTabla$FT)
+```
+$$\chi^{2}_{cal}= 47.49933$$
+$$Valor-p=\wp|\chi^{2}\geq47.49933|=|\chi^{2}_{10-1}\geq47.49933|$$
+en R:
+```{r}
+pchisq(q=47.49933, df=9, lower.tail = F)
+```
+$\chi^{2}_{crit}$ con $\alpha=0.02$
+```{r}
+qchisq(p=0.02,df=9,lower.tail = F)
+```
+
+Como no está cerca de la zona critica, entonces $\therefore$ NO rechazo $H_{0}$ $\therefore$ los valores son independientes.
+
+
+
+
+

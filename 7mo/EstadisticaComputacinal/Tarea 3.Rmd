@@ -1,0 +1,295 @@
+---
+title: 'Tarea 3'
+author: "Aldair Gándara Hernández & Emmanuel Garduño Tellez"
+date: "6/10/2021"
+output: 
+  html_document: 
+    toc: yes
+    theme: lumen
+    number_sections: yes
+    highlight: textmate
+---
+# PROBLEMA: Predecir la diabetes según las medidas de diagnóstico
+
+
+Librerias a usar en nuestro problema
+
+```{r}
+library(naniar)
+library(plotly)
+library(fdth)
+library(agricolae)
+library(UsingR)
+```
+Personalizar nuestra sección 
+
+```{r setup, include=TRUE}
+
+options(digits=3,papersize = "letter")  
+# https://stat.ethz.ch/R-manual/R-devel/library/base/html/options.html
+
+
+# Opciones globales en graficas
+par(mar=c(5.1,5,4.1,2.1),font=3,family="sans",bg="yellow")   
+
+```
+
+
+
+## Lectura de datos
+
+```{r}
+setwd("C:/Users/Emman/Documents/CCH-N} FES-A/fessaa/FES/7mo semestre/Temas Selectos de Estadistica")
+datas<- read.csv("./DATA/diabetes.csv", header=T, sep=",", dec=".", fill=F)
+head(datas)
+tail(datas)
+attach(datas)
+pct_miss(datas)
+
+```
+Un análisis inicial muestra que no existen datos faltantes por lo que no hace falta omitir o imputar.
+
+##  Descripción de las variables
+### Indica el tipo de variable (cualitativa/cuantitativa–discreta o continua) y indica la escala de medición (nominal/ordinal/intervalo/raz´on) de cada variable
+
+Variable        | Tipo                   | Escala de medición
+----------------|------------------------|--------------------
+patient_number  | cuantitativa/discreta  | intervalo
+cholesterol     | cuantitativa/discreta  | intervalo
+glucose         | cuantitativa/discreta  | razon
+hdl_chol        | cuantitativa/discreta  | intervalo
+chol_hdl_ratio  | cuantitativa/continua  | razon
+age             | cuantitativa/discreta  | razon
+gender          | cualitativa            | nominal
+height          | cuantitativa/discreta  | intervalo
+weight          | cuantitativa/discreta  | intervalo
+bmi             | cuantitativa/continua  | intervalo
+systolic_bp     | cuantitativa/discreta  | intervalo
+diastolic_bp    | cuantitativa/discreta  | intervalo
+waist           | cuantitativa/discreta  | intervalo
+hip             | cuantitativa/discreta  | intervalo
+waist_hip_ratio | cuantitativa/continua  | intervalo
+diabetes        | cualitativa            | nominal
+
+## Análisis descriptivo de variables cualitativas
+
+### Elige una variable de este tipo y realiza una tabla de frecuencias que contenga frecuencias absolutas, frecuencias relativas y sus respectivas acumuladas; además de los totales. Interpreta los resultados en el contexto de tu problema.
+
+### Realiza el análisis gráfico adecuado para esta variable (la gráfica debe incluir títulos y color). Interpreta los resultados.
+
+### Elabora una tabla de los estadísticos de resumen que son aplicables a esta variable.
+
+
+
+##  Análisis descriptivo de variables cuantitativas
+
+### Elige una variable de este tipo y realiza una tabla de frecuencias que contenga las frecuencias absolutas, frecuencias relativas y sus respectivas acumuladas; además de los totales. A partir de esta tabla identifica e indica claramente si la distribución es unimodal o multimodal. Interpreta los resultados en el contexto de tu problema.
+
+## Elabora una gráfica adecuada con la que puedas describir el comportamiento de sus observaciones en términos de la dispersión, simetría y la posible existencia de valores atípicos. La gráfica debe incluir títulos y color. Escribe lo más detallado posible tus resultados.
+
+### Elabora una gráfica de ojiva, y sobre ella localiza e indica (aproximadamente) cuáles son los porcentiles 0.15, 0.60 y 0.95. Interpreta estos porcentiles. 
+
+**************************************************************************************************
+
+### TABLAS DE FRECUENCIAS Y DISTRIBUCIÓN
+
+TABLA DE FRECUENCIAS SIMPLE
+
+```{r}
+#Tabla de frecuencias 
+tab_gluc<-table(glucose)
+sum(tab_gluc)
+
+
+tab_gluc_abs<-prop.table(tab_gluc)
+sum(tab_gluc_abs)
+
+tab_gluc<-c(tab_gluc,sum(tab_gluc))
+
+tab_gluc_abs<-c(tab_gluc_abs, sum(tab_gluc_abs))
+
+
+nums<-c(names(tab_gluc))
+nums[length(nums)]="Totales"
+
+tab_freq_gluc<-matrix(cbind(tab_gluc, tab_gluc_abs),byrow=T,nrow = 2,ncol=length(nums))
+length(tab_freq_gluc)
+colnames(tab_freq_gluc)<-nums
+rownames(tab_freq_gluc)<-c("fi", "pi")
+tab_freq_gluc
+
+```
+TABLA DE FRECUENCIAS COMPLETA:
+
+*INTERVALO STURGES*
+
+```{r}
+
+tabla_completa<- fdt(glucose,breaks="Sturges",right=T); tabla_completa
+
+```
+*A partir de la tabla de frecuencias se observa que la mayor frecuencia está en la segunda clase, es decir, en el intervalo de 81.653 a 115.786, lo cual indica que de la población estudiada, la mayoría tiene un nivel de glucosa menor a 140 mg/dl, el cual es un nivel saludable.*
+
+
+### ANÁLISIS GRÁFICO
+
+#### HISTOGRAMA
+
+```{r}
+#Histograma
+
+hist_glu<-hist(glucose, breaks = seq(40,400,30), plot=T, col = heat.colors(12), prob=T, 
+               main="Histograma de Glucosa", xlab="Nivel de Glucosa (mg/dl)", ylab="%")
+lines(density(glucose), col="purple", lwd=3 )
+
+
+```
+
+#### POLIGONO DE FRECUENCIAS
+
+```{r}
+#Poligono
+simple.freqpoly(glucose,col=heat.colors(12), lwd=3 , breaks = seq(40,400,30), main="POLÍGONO DE 
+                FRECUENCIAS", xlab="Nivel de Glucosa (mg/dl)", ylab="# de Pacientes")
+
+
+```
+
+
+*Las 2 primeras gráficas, Histograma y Polígono de Frecuencias respectivamente confirman que la distribución es unimodal con niveles de Glucosa Saludables*
+
+#### DIAGRAMA DE CAJA Y BRAZOS
+
+
+```{r}
+#Caja y brazos
+help("plot_ly")
+caja<-plot_ly(datas, x= ~glucose, type="box", name="Distribución Glucosa")
+layout(p=caja, title= "Caja y Brazos", colorway="red", xaxis=list(title="Glucosa MG/DL"))
+
+```
+*El Diagrama de Caja igual confirma la unimodalidad de la distribución con la señalización de la mediana sesgada al lado Izquierdo, sin embargo también expone de manera clara la existencia de múltiples outliers distribuidos no de manera uniforme pero sí con cierta constancia en valores mayores a 150 mg/dl lo cual indica pacientes con alerta de prediabetes o diabetes tipo 2.*
+
+#### Medidad Descriptivas
+
+1.- MODA
+
+```{r}
+mfv(glucose)
+```
+2.- MEDIANA
+
+Utilizaremos la fórmula ![](Medi.jpg){width=15%}
+```{r}
+median(glucose)
+
+
+li=81.653
+nn=length(glucose)
+FA=109
+fmd=203
+c=115.786-81.653
+
+print("La mediana obtenida por la fórmula es:")
+mediana=li+(((nn/2)-FA)/fmd)*c ; mediana
+
+```
+
+3.- MEDIA
+```{r}
+mean(glucose)
+```
+
+
+
+4.- COEFICIENTE DE ASIMETRÍA
+
+```{r}
+skewness(glucose)
+```
+**ASIMETRÍA POSITIVA**
+El Coeficiente de Asimetría es mayor a 0, por lo que tiene una tendencia  a acumularse del lado izquierdo.
+
+
+5.- CURTOSIS
+
+```{r}
+kurtosis(glucose)
+```
+La Curtosis indica una curva LEPTOCÚRTICA(MUY PICUDA)
+
+6.- COEFICIENTE DE DESVIACIÓN
+
+```{r}
+sd(glucose)/mean(glucose)
+```
+
+### OJIVA
+
+Para unir la gráfica interactiva y los puntos a analizar se realizó la Ojiva a partir de la tabla de frecuencias con los intervalos de clase a partir de los percentiles cada 5%, posteriormente se obtienen los valores de cada percentil solicitado (0.15, 0.60, 0.95) y finalmente se colocó una sombra circular sobre el área que lo indica.
+
+CUANTILES
+```{r}
+quantile(glucose, probs=c(0.15,0.6, 0.95))
+```
+
+
+OJIVA
+```{r}
+pru<-hist(glucose, breaks=quantile(glucose, probs = (seq(0,1,0.05)) ), plot=F)
+
+hist_glu<-pru
+n1<-length(hist_glu$breaks)
+tab_glu_oji<- cbind(hist_glu$breaks[-n1],hist_glu$breaks[-1],
+                 hist_glu$counts,
+                 hist_glu$counts/sum(hist_glu$counts),
+                 cumsum(hist_glu$counts),
+                 cumsum(hist_glu$counts/sum(hist_glu$counts)))
+tab_glu_oji
+
+dimnames(tab_glu_oji)[[2]]<-c("Linf","Lsup","f","fr","F","Fr")
+
+h1<- data.frame(cbind(tab_glu_oji[,2], tab_glu_oji[,6]))
+ojiva<-plot_ly(h1, x= ~tab_glu_oji[,2], y=~tab_glu_oji[,6],
+        marker=list(size=15, color="purple"),
+        type="scatter", mode="lines")
+layout(p=ojiva,title="Ojiva(Glucosa)",
+       xaxis=list(title="Límite Superior"),
+       yaxis=list(title="%"),
+       shapes=list(
+               #lineavertical
+               list(type="line",x0=0, x1=0, y0=0, y1=1, yref="paper"),
+               #lineahorizontal
+               list(type="line",x0=0, x1=400, y0=1, y1=1, yref="paper"),
+               list(type = 'circle',
+                   xref = 'x', x0 = 70, x1 = 80,
+                   yref = 'y', y0 =0.12 , y1 = 0.18,
+                   fillcolor = 'rgb(50, 20, 90)', line = list(color = 'rgb(50, 20, 90)'),
+                   opacity = 0.7),
+              list(type = 'circle',
+                   xref = 'x', x0 = 89, x1 = 99,
+                   yref = 'y', y0 = 0.56, y1 = 0.63,
+                   fillcolor = 'rgb(30, 100, 120)', line = list(color = 'rgb(30, 100, 120)'),
+                   opacity = 0.7),
+               list(type = 'circle', name="Percentil 95%",
+                   xref = 'x', x0 = 230, x1 = 240,
+                   yref = 'y', y0 = 0.91, y1 = 0.97,
+                   fillcolor = 'rgb(90, 200, 75)', line = list(color = 'rgb(90, 200, 75)'),
+                   opacity = 0.7)))
+
+```
+
+***********************************************************************************
+
+## El problema de comparación y asociación entre variables
+De tu conjunto de datos, elige dos variables cuantitativas y una cualitativa. Realiza lo siguiente:
+
+### Considerando a la variable cualitativa, compara estadísticamente las distintas categorías.
+
+
+### Con una variable cuantitativa, forma grupos a partir de la variable cualitativa. Realiza el análisis estadístico e inferencial para comparar el comportamiento de la variable cuantitativa en cada uno de los grupos.
+
+### Analiza el problema de asociación utilizando las dos variables cuantitativas.
+
+
+

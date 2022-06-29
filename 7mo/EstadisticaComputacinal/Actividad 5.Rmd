@@ -1,0 +1,98 @@
+---
+title: 'Actividad 5'
+author: "Aldair Gándara Hernández & Emmanuel Garduño Tellez"
+date: "22/10/2021"
+output: 
+  html_document: 
+    toc: yes
+    theme: lumen
+    number_sections: yes
+    highlight: textmate
+---
+# PROBLEMA: Distribucion triangular
+
+
+Librerias a usar en nuestro problema
+
+```{r}
+library(dplyr)
+library(RColorBrewer)
+```
+Función de probabilidad:
+
+$$f(x)= [ \frac{1}{2}(x-2)]\mathbb{I}_{[2,3]}(x) +  \frac{1}{2}(2-\frac{x}{3})]\mathbb{I}_{(3,6]}(x)$$
+
+## Graficar funcion f(x)
+
+```{r}
+fx <- function(n){
+  u <- n
+  x <- case_when(        
+    u <= 3 ~ (1/2)*(u-2), 
+    u <= 6 ~ (1/2)*(2-(u/3))
+  )
+}
+y<-seq(0,6,0.01)
+
+plot(fx, 2,6, main= "grafica f(x)", col = "red")
+```
+
+## Escribir el codigo para producir número aletorios con la distribucion f(x)
+
+De la Función de Probabilidad Acumulada calculada en clase:
+
+$$
+F(x)= \left\{ \begin{array}{lcc}
+             0 &   si  & x \leq 2 \\
+             \\ \frac{x^2}{4} -x +1 & si & 2 < x < 3\\
+             \\ \frac{-x^2}{12} +x -2 &  si & 3 < x < 6 \\
+             \\ 1 &  si  & x \geq 6
+             \end{array}
+   \right.
+$$
+Se obtienen las siguientes fórmulas  para la generación de aleatorios.
+
+```{r}
+numfx <- function(x){
+  u <- x 
+  x<- case_when(        
+    u <= .25 ~ 2 + 2*sqrt(u), 
+    u <= 1 ~ 6 - sqrt(12 - 12 * u),
+  )
+}
+```
+
+## Dibuja el histograma de los volumenes simulados y sobre el graficar f(x)
+
+```{r}
+n<- 1000000
+u<- runif(n)
+x <- numfx(u)
+hist(x,prob=TRUE,col=brewer.pal(n = 5, name = "Reds")) 
+lines(y, fx(y),col="green",lwd=2)
+```
+
+## Calcular el E[x], Var[x] teoricos. Compararlos con los correspondientes valores simulados
+
+Se sabe por formulas que:
+$$E[x] = \frac{a+b+c}{3}$$
+y $$Var[x]= \frac{a^{2}+b^{2}+c^{2}-ab-ac-bc}{18}$$
+
+Cabe aclarar que para la E[x] y Var[x], se usaran las cotas superior e inferior y su pico del triagulo, para caulcular las formulas
+```{r}
+a <- 2 #cota inferior 
+b <- 6 #pico del triangulo
+c <- 3 #cota superior
+#Esperanza teoriaca vs valores generados
+(a+b+c)/3
+mean(x)
+#Varianza teoriaca vs valores generados
+(a*a + b*b + c*c - a*b - a*c - b*c)/18
+var(x)
+```
+
+
+
+
+
+

@@ -1,0 +1,25 @@
+---
+title: "Tuto 2"
+author: "Emma"
+subtitle: "Analisis de datos"
+date: "25/08/21"
+output: 
+  html_document: 
+    toc: yes
+    highlight: tango
+    theme: journal
+    number_sections: yes
+---
+
+# Personalizando nuestra seión
+
+```{r setup, include=TRUE}
+options(digits=4,papersize = "letter")  
+# https://stat.ethz.ch/R-manual/R-devel/library/base/html/options.html
+
+
+# Opciones globales en graficas
+par(mar=c(5.1,5,4.1,2.1),font=3,# 1=plain,2=bold,3=italic,4=bold italic,5=symbol
+        family="sans",bg="yellow")   # sans, serif, mono, symbol
+```
+

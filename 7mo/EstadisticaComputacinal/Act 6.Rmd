@@ -1,0 +1,133 @@
+---
+title: "Tarea 6"
+author: "Aldair Gándara Hernández & Emmanuel Garduño Tellez"
+date: "4/11/2021"
+output: 
+  html_document: 
+    toc: yes
+    theme: lumen
+    number_sections: yes
+    highlight: textmate
+---
+
+```{r}
+library(MASS)
+library(ggplot2)
+library(plotly)
+
+```
+
+# GRAFICAR LA FUNCIÓN DE PROBABILIDAD
+
+$$f_{x}(x)=  (\frac{2x}{e^x})^2\mathbb{I}_{[0,\infty]}(x)$$
+Es obtenida de una Gamma con parametros $\alpha =3$ y $\lambda =2$. COmo se muestra a continuación:
+
+Si $X \sim \Gamma(x, \alpha, \lambda)$ su función de probabilidad es :
+
+$$ f_{x}(x) = \frac{\lambda ^\alpha x^{\alpha -1} e^{-\lambda x}}{\Gamma(\alpha)} $$
+Sabiendo que $\Gamma(n)=(n-1)!$ y sustituyendo los parámetros $\alpha =3$ y $\lambda =2$.
+
+$$f_{x}(x,3,2) = \frac{2^3 x^2 e^{-2x}}{(3-1)!}$$
+$$f_{x}(x,3,2) =  \frac{4x^2}{e^{2x}}  = (\frac{2x}{e^x})^2$$
+y $g(x) = e^{-x}$ viene de una Exponencial con $\lambda=1$ Como se muestra a continuación:
+
+Si $X \sim exp(\lambda)$ su funcion de probailidad es:
+
+$$ f_x(x) = \lambda e^{-\lambda x}\mathbb{I}_{[0,\infty]}(x)$$
+Sistiyuyendo a $\lambda=1$.
+$$ f_x(x,1) = 1e^{-1 x}=e^{- x}=g(x)$$
+
+
+```{r}
+fx<-function(x){
+  ((2*x)/(exp(x)))^2
+}
+
+x<- seq(0,6,0.01)
+plot(x,fx(x),type="l",col="red", xlim = c(0,6), ylim = c(0,1), lwd=2)
+
+
+```
+
+Graficando $$\frac{f(x)}{g(x)}$$
+```{r}
+gx<-function(x){
+  exp(-x)
+}
+plot(x,fx(x),type="l",col="red", xlim = c(0,6), ylim = c(0,2), lwd=2)
+lines(x,fx(x)/gx(x),type="l",col="blue", lwd=2)
+
+```
+
+# ACEPTACIÓN Y RECHAZO
+
+Para obtener el valor de C lo haremos de forma automática por R y derivando la función
+
+Primera forma:
+```{r}
+
+c1 <- max(fx(x)/gx(x)); c1
+
+```
+Segunda Forma:
+$$\frac{d }{dx} \frac{fx}{gx}  = \frac{d }{dx} \frac{(\frac{2x}{e^x})^2}{ e^-x }$$
+$$\frac{d }{dx} \frac{fx}{gx}  = \frac{d }{dx} \frac{4x^2}{e^x} $$
+$$\frac{d }{dx} \frac{fx}{gx} = \frac{(e^x)(8x) -(4x^2 e^{x}) }{e^{2x} }$$
+Simplificando e igualando a 0
+
+$$\frac{(8x) -(4x^2)  }{e^{x} } = 0$$
+$$ 8-4x=0$$
+$$x=2$$
+Evaluando el valor obtenido en $\frac{f(x)}{g(x)}$ y comparando con el obtenido por la función max
+
+```{r}
+
+c2<- fx(2)/gx(2); c2
+
+c1 == c2
+c<-c1
+```
+$$h(x) = \frac{f(x)}{cg(x)}$$
+
+```{r}
+
+n<- 10000
+k<- 0   # contador para aceptar valores
+j<- 0  # contador de iteraciones necesarias para generar las "n" variables
+y<- numeric(n)
+
+while(k< n){
+  u= runif(1)
+  j= j+1  
+  x= rexp(1)     # v.a de g(x)~exp(1)
+  if((((2*x)/exp(x))^2)/(c*exp(-x)) > u){   # comparo con h(x)
+    k= k+1  # acepto x
+    y[k]= x   
+  }    
+}		
+j #Numero de intentos para obtener los ",n, " números aleatorios
+n*c #Numero estiado de iteracciones para optener los 10000
+```
+
+# VERIFICACIÓN
+
+## VERIFICACIÓN GRÁFICA
+
+```{r}
+
+alfa  <-3
+landa <-2
+hist(y,probability = T,col="gray50")  # histograma de las variables simuladas
+curve(dgamma(x,alfa,landa),col="darkblue", lwd=2, add=TRUE, yaxt="n")   # curva teorica
+
+```
+
+## VERIFICACIÓN ESTADÍSTICA
+
+```{r}
+
+mean(y); alfa/landa   
+var(y); alfa/(landa*landa)   
+```
+
+

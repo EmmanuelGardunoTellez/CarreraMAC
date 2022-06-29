@@ -1,0 +1,136 @@
+---
+title: "Practica 2: Manejo de datos en R"
+author: "Emmanuel Garduño Téllez"
+date: "Estadistica Comutacional"
+output: 
+  html_document: 
+    toc: yes
+    highlight: textmate
+    theme: lumen
+    number_sections: yes
+  pdf_document:
+    toc: yes
+subtitle: Analisis descriptivo de datos
+header-includes:
+  \renewcommand{\contentsname}{Contenido}
+---
+
+#personalizar nuestra seccion
+
+```{r setup, include=TRUE}
+
+options(digits=3,papersize = "letter")  
+# https://stat.ethz.ch/R-manual/R-devel/library/base/html/options.html
+
+
+# Opciones globales en graficas
+par(mar=c(5.1,5,4.1,2.1),font=3,family="sans",bg="yellow")   
+
+```
+```{r}
+setwd("C:/Users/Emman/Documents/CCH-N} FES-A/fessaa/FES/7mo semestre/Temas Selectos de Estadistica")
+library(readr)
+diabetes <- read_csv("./DATA/diabetes.csv", 
+    locale = locale(decimal_mark = ","))
+```
+
+
+# [15 puntos] Descripción de las variables
+
+## Indica el tipo de variable (cualitativa/cuantitativa–discreta o continua). Indica la escala de medición (nominal/ordinal/intervalo/razón) de cada variable.
+
+Variable        | Tipo                   | Escala de medición
+----------------|------------------------|--------------------
+patient_number  | cuantitativa/discreta  | intervalo
+cholesterol     | cuantitativa/discreta  | intervalo
+glucose         | cuantitativa/discreta  | razon
+hdl_chol        | cuantitativa/discreta  | intervalo
+chol_hdl_ratio  | cuantitativa/continua  | razon
+age             | cuantitativa/discreta  | razon
+gender          | cualitativa            | nominal
+height          | cuantitativa/discreta  | intervalo
+weight          | cuantitativa/discreta  | intervalo
+bmi             | cuantitativa/continua  | intervalo
+systolic_bp     | cuantitativa/discreta  | intervalo
+diastolic_bp    | cuantitativa/discreta  | intervalo
+waist           | cuantitativa/discreta  | intervalo
+hip             | cuantitativa/discreta  | intervalo
+waist_hip_ratio | cuantitativa/continua  | intervalo
+diabetes        | cualitativa            | nominal
+
+# [20 puntos] Análisis descriptivo de variables cualitativas
+
+## Elige una variable de este tipo y realiza una tabla de frecuencias que contenga frecuencias absolutas, frecuencias relativas y sus respectivas acumuladas; además de los totales. Interpreta los resultados en el contexto de tu problema.
+La variable va a ser gender, que contiene informacion del genero de las personas con diabetes
+```{r}
+#Tabla de frecuencia absolutas
+tabla_genero <- table(diabetes$gender) 
+print(tabla_genero)
+sum(tabla_genero)
+nrow(diabetes)
+#frecuencias relativas
+prop_genero <- round(prop.table(tabla_genero),digits = 3)
+print(prop_genero)
+sum(prop_genero)
+```
+Como podemos ver, no existen valor con N/A, y que hay mas mujeres en este estudio, siendo un total de 228 mujeres y 162 hombres
+
+
+## Realiza el análisis gráfico adecuado para esta variable (la gráfica debe incluir títulos y color). Interpreta los resultados.
+
+En este caso para el analisis grafico, usare diagrama de barras
+```{r}
+barplot(tabla_genero,names.arg=c("Mujer","Hombre"),col=c("blue","red"), ylim=c(0,250))
+ title("Genero (Frecuencias Absolutas)")
+ 
+barplot(prop_genero,names.arg=c("Mujer","Hombre"),col=c("blue","red"),,ylim=c(0,0.6))
+ title("Genero (Frecuencias Relativas)")
+```
+
+De la gráfica de barras se observa que, hay diferencias entre el número de mujeres y hombres, en donde se realizo la toma de datos. Vale la pena analizar estadísticamente si esto es así:
+
+```{r}
+# Comparacion entre la proporcion de mujeres y la proporcion de hombres.
+
+n_muj<- tabla_genero[1] #mujeres
+n_hom<- tabla_genero[2] #hombres
+   
+prop.test(x=c(n_muj, n_hom), n=c(390,390), conf.level=0.90)
+```
+De acuerdo con el intervalo de confianza para la diferencia de proporciones se concluye que SÍ hay diferencia entre el número de mujeres y hombres, de hecho $p_{hombre}-p_{mujer}<0$; así que la proporción de mujeres si es estadísticamente mayor a la correspondiente de los hombres (como lo muestran las gráficas).
+
+## Elabora una tabla de los estadísticos de resumen que son aplicables a esta variable.
+En este caso solo puede obtenerse la **moda**
+```{r}
+library(modeest)
+# Variable nominal
+mfv(diabetes$gender)     # moda
+
+mode(diabetes$gender)    # NO!
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

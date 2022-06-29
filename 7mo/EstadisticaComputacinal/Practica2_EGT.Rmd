@@ -1,0 +1,154 @@
+---
+title: "Practica 2: Manejo de datos en R"
+author: "Emmanuel Garduño Téllez"
+date: "Estadistica Comutacional"
+output: 
+  html_document: 
+    toc: yes
+    highlight: textmate
+    theme: lumen
+    number_sections: yes
+  pdf_document:
+    toc: yes
+subtitle: Analisis descriptivo de datos
+header-includes:
+  \renewcommand{\contentsname}{Contenido}
+---
+
+#personalizar nuestra seccion
+
+```{r setup, include=TRUE}
+
+options(digits=3,papersize = "letter")  
+# https://stat.ethz.ch/R-manual/R-devel/library/base/html/options.html
+
+
+# Opciones globales en graficas
+par(mar=c(5.1,5,4.1,2.1),font=3,family="sans",bg="yellow")   
+
+```
+# [10 puntos] Presentación
+
+## Explica el contexto del problema que vas a analizar y el por qué están incluidas esas variables en la base de datos elegida [no olvides citar a la fuente de información].
+
+Por motivos personales, quiero analizar una base de datos centrada en videojuegos, para analizar y ver cómo está creciendo dicha industria, basándome en los datos recolectados. El CSV, fue encontrado en: https://www.kaggle.com/sidtwr/videogames-sales-dataset, página web centrada en data science, donde se suben pruebas y archivos con bases de datos de todo tipo. Las variables de interés para esta práctica son:
+
+* Platform: Plataforma donde salió el videojuego
+* Year_of_Release: Año de salida
+* Genere: Genero asociado al juego principalmente
+* Publisher: Empresa que publicaba el videojuego
+* Global_Sales: Ventas globales (en millones de dólares)
+* Critic_Score: Evaluacion de la crítica de 0 a 100
+* Rating: Clasificación por edades
+
+
+# [20 puntos] Manejo de datos
+
+Antes de empezar a manipular los datos se procederá a limpiarlo antes de unos N/A distintos que aparecen como información, Estos N/A "existentes" se encuentran en Publisher
+
+
+```{r}
+
+setwd("C:/Users/Emman/Documents/CCH-N} FES-A/fessaa/FES/7mo semestre/Temas Selectos de Estadistica")
+library(readr)
+Video_Games <- read_csv("./DATA/Video_Games_Sales_as_at_22_Dec_2016.csv", 
+                                                col_types = cols(Year_of_Release = col_number()), 
+                                                na = c("NA","N/A", "")) #Diferentes tipos de N/A
+head(Video_Games)    # ver los primeros 6 renglones del conjunto de datos
+tail(Video_Games)    # ver los ultimos 6 renglones del conjunto de datos
+
+```
+
+
+## Edita el nombre de todas las columnas y cambia el orden de las mismas (como lo visto en clase). Guardarlo con otro nombre, por ejemplo, datosordenados.txt. El formato del archivo puede ser .csv,.txt,.xls,.dat
+```{r}
+library(janitor)
+datosV<- clean_names(Video_Games)
+names(Video_Games) #Limpia nombres
+names(datosV)
+library(dplyr)
+datosV.a<- select(datosV, platform, year_of_release, genre, publisher, global_sales, critic_score, rating, developer, everything())
+names(datosV.a) #Reorganizo columnas para mi comodidad
+write.csv(datosV.a, file = "./DATA/DatosVideojuego.csv") #Guardo un documento con las columnas cambiadas
+```
+
+## Separa las variables cualitativas de las cuantitativas y guarda cada grupo con un nombre distinto.
+```{r}
+datosV.a.n<- select(datosV.a,where(is.numeric)) #Variables númericas
+head(datosV.a.n) 
+datosV.a.c<- select(datosV.a,where(is.character)) #Variables caracteres
+head(datosV.a.c) 
+```
+
+# [50 puntos] Datos faltantes e imputación
+
+## Revisa el contenido de la base de datos e indica si tienes presencia de datos faltantes en alguna(s) variable(s). Puedes utilizar las funciones vistas en R para realizarlo.
+
+para ello usaremos la librería naniar
+```{r}
+library(naniar)
+vis_miss(datosV.a)
+#Nota: las lineas negras indican la posicion del dato faltante en cada columna
+```
+Si hay datos faltantes.
+
+##  Identifica el tipo de patrón de datos faltantes con alguna de las técnicas discutidas en clase. Explica tus hallazgos lo más detallado posible.
+
+A primera vista no se ve nada relevante, a menos que arreglemos el data frame con respecto a la plataforma y en orden los nombres de los juegos 
+
+```{r}
+datosV.a.plataforma.nombre <- arrange(datosV.a, platform, name)
+vis_miss(datosV.a.plataforma.nombre)
+
+```
+
+Con ello y revisando los datos, se alcanza a ver que ciertos juegos no tienen una puntuación de critica o clasificación de edad, esto se debe a ser juegos de series animadas o de nicho para ciertos países. También se alcanza a observar que el deverloper cuando no existe, por lo regular es la misma empresa que es su publisher la que hace esta labor. Por tanto, se puede decir que sus datos faltantes son tipo MAR
+
+## Utiliza el método de imputación simple (con el criterio de la media) para completar la información. Guarda con otro nombre esta base de datos, ya que se utilizará más adelante.
+
+```{r}
+library(mice)
+set.seed(4444)
+imputed= mice(datosV.a.plataforma.nombre, m=1, defaultMethod = "pmm")
+datosV.imp = complete(imputed)
+vis_miss(datosV.imp)
+```
+
+## Si la base de datos está originalmente completa, entonces elige 2 ó 3 variables (cuantitativas) y realiza lo siguiente:
+  1. Simula un patrón MCAR del 15% de valores faltantes en cada una.
+  2. Verifica mediante un método gráfico o inferencial (de los estudiados en clase) que el patrón de faltantes es MCAR.
+  3. Imputa (con el criterio de la media) los valores faltantes y guarda esta nueva base datos con otro nombre.
+
+Esto no es necesario en este data frame, ya que le faltan datos en casi todas las variables ya sea desde menos del 1% hasta casi un 52%, dependiendo de cada columna
+
+## A partir de la base de datos “incompleta” compara los siguientes métodos de imputación del paquete mice: sample, norm.nob, cart, rf. La comparación puedes hacerla con marginplot, o bien, utilizando la función summary para que obtengas el resumen estadístico de cada variable
+
+Nota, se usará solo summary.
+
+  *sample
+```{r}
+imputed.sample = mice(datosV.a.plataforma.nombre, m=1, defaultMethod = "sample") #sample
+imputed.sample.imp = complete(imputed.sample)
+summary(imputed.sample.imp) #datos de imputacion sample
+```
+
+  *norm.nob
+```{r}
+imputed.norm.nob = mice(datosV.a.plataforma.nombre, m=1, defaultMethod = "norm.nob") #norm.nob
+imputed.norm.nob.imp = complete(imputed.norm.nob)
+summary(imputed.norm.nob.imp) #datos de norm.nob
+```  
+  *cart
+```{r}
+imputed.cart = mice(datosV.a.plataforma.nombre, m=1, defaultMethod = "cart") #cart
+imputed.cart.imp = complete(imputed.cart)
+summary(imputed.cart.imp) #datos de cart
+```
+  
+  *rf
+```{r}
+imputed.rf = mice(datosV.a.plataforma.nombre, m=1, defaultMethod = "rf") #rf
+imputed.rf.imp = complete(imputed.rf)
+summary(imputed.rf.imp) #datos de rt
+```
+  A exepcion del metodo norm.nob, todos los demas dan resultados similares, y este metodo tambien da resultados negativos, que en si no tienen ningun valor, ya que su escala va del 0 en adelante, pudiendose considerar errores.

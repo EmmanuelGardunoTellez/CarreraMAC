@@ -1,0 +1,196 @@
+---
+title: "Tarea 10"
+author: "Aldair Gándara Hernández & Emmanuel Garduño Tellez"
+date: "03/12/2021"
+output: 
+  html_document: 
+    toc: yes
+    theme: lumen
+    number_sections: yes
+    highlight: textmate
+---
+
+
+# Simulación de intervalos de confianza para la media.
+
+## Utiliza el método de Monte Carlo para estimar el intervalo de confianza del 96% para la media poblacional. Para ello considera 3000 muestras de tamáño 35 cada una, extraídas de una población normal con parámetros $\mu = −5$ y $\sigma^{2}= 4$. Estima el nivel de confianza empírico y su error estándar.
+
+Primero se asignan los valores necesarios:
+```{r}
+n <- 35 #tamaño
+mu <--5 #mu
+sigma<- sqrt(4) #sigma 
+m<- 3000 #muestras
+conf <- 0.96 #int confianza
+alpha <- 1 - conf #alpha
+ci_infn <- integer(m) #tamaño de los ci
+ci_supn <- integer(m)
+```
+Luego de ello generamos las j-esimas muestras aleatorias y calculamos el intervalo de confianza $C_{j}$ para cada muestra j-esimas:
+```{r}
+for(i in 1:m){
+  x <- rnorm(n,mean=mu,sd=sigma)                            #muestra x_i
+  ci_infn[i] <- ((n-1)*var(x))/qchisq(1-alpha/2,df=n-1)      #intervalo inferiror
+  ci_supn[i] <- ((n-1)*var(x))/qchisq(alpha/2,df=n-1)        #intervalo superior Nota: Nome acuerdo poruqe salen alrevez, pero estan bien
+}
+```
+Nota, para sacar la cota inferiror y superior se uso:
+$$\frac{(n-1)s^{2}}{\chi^{2}_{1-\frac{\alpha}{2},n-1}}<\sigma^{2}<\frac{(n-1)s^{2}}{\chi^{2}_{\frac{\alpha}{2},n-1}}$$
+
+Luego calculamos $y_{i} = 1(\theta \in c_{i})$ para la muestra j-esima
+```{r}
+for(i in 1:m){
+    if(ci_infn[i]>sigma^2){ #si no cumplen los intervalos se asigna 0 si es superor y 99 si es inferior
+      ci_infn[i] <- 99
+      ci_supn[i] <- 0
+    }
+  if(sigma^2>ci_supn[i]){
+    ci_infn[i] <- 99
+    ci_supn[i] <- 0
+  }
+}
+```
+Obtenemos el nivel de confianza empírico y su error estándar:
+```{r}
+conf_supn<- mean(sigma^2< ci_supn); conf_supn  # media para nivel de confianza con la cota superior
+es_supn<- sqrt((conf_supn*(1-conf_supn)/m)); es_supn  # error estandar 
+conf_infn<- mean(sigma^2> ci_infn); conf_infn  # media para nivel de confianza con la cota superior
+es_infn<- sqrt((conf_infn*(1-conf_infn)/m)); es_infn   # error estandar 
+```
+
+
+## Repite el inciso anterior pero ahora considera una población $\chi^{2}$ con 3 grados de libertad.
+Primero se asignan los valores necesarios:
+```{r}
+n <- 35 #tamaño
+k <- 3 #grados de libertad 
+m<- 3000 #muestras
+conf <- 0.96 #int confianza
+alpha <- 1 - conf #alpha
+ci_inf <- integer(m) #tamaño de los ci
+ci_sup <- integer(m)
+```
+Luego de ello generamos las j-esimas muestras aleatorias y calculamos el intervalo de confianza $C_{j}$ para cada muestra j-esimas:
+```{r}
+for(i in 1:m){
+  x <- rchisq(n, df= k)                            #muestra x_i
+  ci_inf[i] <- ((n-1)*var(x))/qchisq(1-alpha/2,df=n-1)      #intervalo inferiror
+  ci_sup[i] <- ((n-1)*var(x))/qchisq(alpha/2,df=n-1)        #intervalo superior
+}
+```
+Nota, para sacar la cota inferiror y superior se uso el mismo intervalo:
+$$\frac{(n-1)s^{2}}{\chi^{2}_{1-\frac{\alpha}{2},n-1}}<\sigma^{2}<\frac{(n-1)s^{2}}{\chi^{2}_{\frac{\alpha}{2},n-1}}$$
+Luego calculamos $y_{i} = 1(\theta \in c_{i})$ para la muestra j-esima
+```{r}
+for(i in 1:m){ #varaianza de chi-cuadrada es 2k
+  if(ci_inf[i]>(2*k)){ #si no cumplen los intervalos se asigna 0 si es superor y 99 si es inferior
+    ci_inf[i] <- 99
+    ci_sup[i] <- 0
+  }
+  if((2*k)>ci_sup[i]){
+    ci_inf[i] <- 99
+    ci_sup[i] <- 0
+  }
+}
+```
+Nota la varianza de $\chi^{2}$ es $2k$. k grados de libertad
+Obtenemos su nivel de confianza empírico y su error estándar:
+```{r}
+conf_sup<- mean(2*k< ci_sup); conf_sup  # media para nivel de confianza con la cota superior
+es_sup<- sqrt((conf_sup*(1-conf_sup)/m)); es_sup  # error estandar 
+conf_inf<- mean(2*k> ci_inf); conf_inf  # media para nivel de confianza con la cota superior
+es_inf<- sqrt((conf_inf*(1-conf_inf)/m)); es_inf   # error estandar 
+```
+
+
+## Compara y discute los resultados en los incisos 1.1 y 1.2. ¿Cuál de los dos intervalos anteriores es preferido y por qué?
+
+El observar sus intervalos de confianza se decide usar la normal con parámetros $\mu = −5$ y $\sigma^{2}= 4$, debido a que es el que tiene mayor nivel de confianza y su intervalo se asemeja mas al que usamos para crearlo. Aparte que la prueba de supone que la f.d.a es normal.  
+
+
+# Pruebas de hipótesis
+
+En una empresa se realizó un cambio en el plan de incentivos de los empleados y se desea saber si este fue exitoso. Se seleccionaron 12 empleados y los siguientes datos muestran las tasas de trabajo defectuoso de los empleados antes y después del cambio en el plan.
+
+|Antes  |8|7|6|9|7|10|8 |6|5|8|10|8|
+|-------|-|-|-|-|-|--|--|-|-|-|--|-|
+|Después|6|5|8|6|9|8 |10|7|5|6|9 |5|
+
+## ¿Se puede afirmar que con el cambio disminuyeron las tasas de unidades defectuosas producidas?
+Antes de nada suponemos que anntes y despues son lo mismo, por lo abto $H_{0}:=H_{antes}=H_{despues}$
+```{r}
+antdes   <- c(rep("Antes",12),rep("Despues",12))
+defectos <- c(8,7,6,9,7,10,8,6,5,8,10,8,6,5,8,6,9,8,10,7,5,6,9,5)
+datos <- data.frame(momento = antdes,
+                cantidad = defectos)
+
+names(datos); str(datos)
+factor(datos$momento)
+
+boxplot(datos$cantidad~datos$momento, las=1, ylab="erores", 
+        xlab="antes/despues",main="errores antes y despues",col=rainbow(2))
+```
+
+Al ver la boxplot nos damos cuenta de que el intervalo de despues crecio (del primer y tercer cuantil), pero que a su vez la mediana de errores disminuyo de 8 a 6.5, pero si vemos su media esta paso de 7.6 a 7, podria decirse que si hubo un cambio, pero se necesitaria probar estadisticamente
+
+## Indica si es necesario algun(os) supuesto(s) para realizar la prueba.
+
+Se nececita suponer normalidad, para realizar una prueba, si se usa la pruebas boostrap se agregaria la normalidad, ya que se añade el supuesto con boostrap cuando no se puede asumir la normalidad
+
+## Construye y estima un intervalo de confianza BILATERAL del 92% para estudiar la diferencia entre la tasa promedio de trabajo defectuoso antes del plan y la correspondiente despues del plan. Concluye en el contexto del problema.
+Primero creamos un par de matrices para los valores boostrap, prara crear los intervalos de cofianza
+```{r}
+#errores
+set.seed(2021)
+nivelConf<- 0.92
+alpha<- 1-nivelConf
+errorant<- datos$cantidad[datos$momento=="Antes"] 
+errordes<- datos$cantidad[datos$momento=="Despues"]
+(n.a <- length(errorant))  # no. de observaciones a extraer de caseina
+(n.d <- length(errordes))  # no. de observaciones a extraer de harina de carne
+B <- 12000  # no. muestras bootstrap
+
+Bootant <- matrix(sample(errorant, size = B*n.a, replace = TRUE), #Muestras con remplazo
+                  ncol = B, nrow = n.a)
+Bootdes <- matrix(sample(errordes, size = B*n.d, replace = TRUE),
+                  ncol = B, nrow = n.d)
+```
+Calculamos la diferencia de medias y medianas para cada uestra boostrap
+```{r}
+BootDifMedias <- colMeans(Bootant)- colMeans(Bootdes)
+BootDifMedianas <- apply(Bootant, MARGIN = 2, FUN = median) - apply(Bootdes, MARGIN=2, FUN=median) 
+```
+Se usara el metodo normal para generar dichos valores, primero para las Medias
+```{r}
+(ic_difmedias_norm<- c(mean(BootDifMedias)-abs(qnorm(alpha/2))*sd(BootDifMedias),
+                       mean(BootDifMedias)+abs(qnorm(alpha/2))*sd(BootDifMedias)))
+(Lmedias_norm<- ic_difmedias_norm[2]-ic_difmedias_norm[1]) #intervalo
+```
+Como podemos observar el intervalo de errores paso por el 0, lo que nos puede decir que no afecta en nadalos cambios implementados. Ahora para las Medianas
+
+```{r}
+(ic_difmedianas_norm<- c(mean(BootDifMedianas)-abs(qnorm(alpha/2))*sd(BootDifMedianas),
+                         mean(BootDifMedianas)+abs(qnorm(alpha/2))*sd(BootDifMedianas)))
+(Lmedianas_norm<- ic_difmedianas_norm[2]-ic_difmedianas_norm[1]) #intervalo
+```
+Por lo tanto el hacer cambios o no, no afecta a disminuir el numero de piezas defectuosas. Y dependera del dueño seguir o regresar los cambios implementados
+
+## Usa Monte Carlo con 12000 réplicas para obtener una estimación puntual empírica del error tipo I. Además calcula su error estándar.
+
+# Regresión y bootstrap
+
+considera las variables cuantitativas del conjunto de datos completo utilizado en las actividades 2 y 3.
+
+## Regresión lineal MULTIPLE
+
+### Considera un primer y único modelo lineal múltiple (no importa que no sea el mejor). Estima los parámetros así como sus intervalos de confianza al 95%.
+
+### Repite el inciso anterior ahora con el conjunto de variables imputado (ver Actividad 2).
+
+### Compara tanto las estimaciones de los parámetros como sus intervalos de confianza.
+
+## Utiliza el método de bootstrap para estimar el intervalo de confianza de los parámetros del modelo lineal múltiple al 95%. Compara tus resultados.
+
+
+
+
