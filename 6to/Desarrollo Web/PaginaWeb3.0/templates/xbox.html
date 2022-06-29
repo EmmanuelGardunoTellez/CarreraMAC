@@ -1,0 +1,211 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
+<head>
+<title>XBox</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css" href="../static/style.css" />
+<!-- -->
+<link rel="icon" href="{{url_for('static', filename='images/descargar.ico')}}">
+<script type="text/javascript" src="../static/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="../static/scripts.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<!--[if lte IE 6]>
+<link rel="stylesheet" type="text/css" href="ie.css" />
+<script type="text/javascript" src="js/unitpngfix.js"></script>
+<![endif]-->
+</head>
+<body>
+<!-- BEGIN header -->
+<header id="header">
+ 
+  <nav class="color_header">
+  <ul class="pages">
+    <li><a href="/">Principal</a></li>
+    <li><a href="/loging">Iniciar sesion</a></li>
+    <li><a href="#footer">Contacto</a></li>
+  </ul>
+  </nav>
+  <section class="logo"> 
+    <a href="/"><img src="{{url_for('static', filename='images/una_pagina_mas.png')}}"></img> </a>
+    
+  </section>
+
+  
+  <nav class="nav1">
+    <ul class="categorias">
+      <li><a href="/">Recientes</a></li>
+      <li><a href="#">Consolas</a>
+        <ul class="sub_menu1">
+          <li><a href="/nintendo">Nintendo</a></li>
+          <li><a href="/play">playstation</a></li>
+          <li><a href="/xbox">XBox</a></li>
+          <li><a href="/pc">PC</a></li>
+        </ul> </li> 
+      <li><a href="/moviles">Moviles</a></li>
+      <li><a href="/anime">Anime </a></li>
+      <li><a href="/lr">Login registrados</a></li>
+    </ul>
+  </nav>
+  
+</header>
+<!-- END header -->
+
+<!-- BEGIN main -->  
+<main id="main">
+  
+  <!-- BEGIN wrapper -->
+  <div id="wrapper">  
+    <!-- BEGIN content -->  
+    <div id="content">
+      <section class="head">
+          <!-- begin featured -->
+          <h2 class="title">Noticas Nuevas</h2>
+          <div class="collect_featured">
+            <div class="featured">
+              <div class="thumb">
+                <article class="b">
+                  <ul class="photo1">
+                    <li class="first"><img src="{{url_for('static', filename='images/xbox_game_pass.jpg')}}" alt="" /></li>
+                    <li><img src="{{url_for('static', filename='images/xboxE3.jpg')}}" alt="" /></li>
+                    <li><img src="{{url_for('static', filename='images/xbox_pass.jpg')}}" alt="" /></li>
+                  </ul>
+                  <ul class="text1">
+                    <li class="first">
+                      <h2>Xbox Game Pass sigue </h2>
+                      <p>Pues si el mítico game pass es una locura de lo visto en E3, 
+                        pues se agregaron un motón de juegos al ya grande catálogo de juegos disponibles de este</p>
+                    <li>
+                      <h2>De los juegos a resaltar durante el E3</h2>
+                      <p>Starfield, Halo Infinite, S.T.A.L.K.E.R 2., Back 4 Blood, Redfall, Forza Horizon 5 </p>
+                    <li>
+                      <h2>Aqui vamos</h2>
+                      <p>Una nueva cantidad de diversion sobre las platafomas de microsoft</p>
+                  </ul>
+                </article>
+              </div>
+            </div>
+            <div class="featured">
+              <div class="thumb">
+                <article class="b">
+                  <ul class="photo2">
+                    <li class="first"><img src="{{url_for('static', filename='images/Forza5.jpg')}}" alt="" /></li>
+                    <li><img src="{{url_for('static', filename='images/Forza51.jpg')}}" alt="" /></li>
+                    <li><img src="{{url_for('static', filename='images/Forza52.jpg')}}" alt="" /></li>
+                  </ul>
+                  <ul class="text2">
+                    <li class="first">
+                      <h2>El nuevo Forza Horizan 5: Ambientado en México ahora</h2>
+                      <p>Playground Games presento un grandioso diseño del nuevo Forza. 
+                        Se dice que este tendrá tormentas de arena y una climatología climática mayor que la de Forza Horizon 4.</p>
+                    <li>
+                      <h2>Creados para Xbox Series X|S</h2>
+                      <p>Contarán con unos tiempos de carga, unos gráficos y una capacidad de respuesta sin precedentes. Segun XBox</p>
+                    <li>
+                      <h2>Mexico lindo y querido</h2>
+                      <p>Esto siendo mexicano y aunque el juego sea echo en México, me da ánimos ver cómo nos siguen representando en este medio tan increíble cómo es lo videojuegos.</p>
+                  </ul>
+                </article>
+              </div>
+            </div>
+          </div>
+
+          <!-- end featured -->
+
+          <!-- begin post -->
+          <div class="post">
+            <div class="l"><img src="{{url_for('static', filename='images/sea_thieves.jpg')}}" alt="" /> </div>
+            <section class="r">
+              <h2>sea of thieves</h2>
+              <p>A Pirate's Life, el crossover definitivo con Piratas del Caribe Jack Sparrow se une a la tripulación
+                Mike Chapman, director creativo de Rare, expresa cómo Disney ha significado mucho para él y diversas generaciones. 
+                Esta unión de Sea of Thieves con Piratas del Caribe es todo un sueño hecho realidad.</p>
+              <p class="details">20/06/21 | Advertising | Alexis T</p>
+            </section>
+          </div>
+          <!-- end post -->
+          <!-- begin post -->
+          <div class="post">
+            <div class="l"><iframe src="https://www.youtube.com/embed/8tMIOyDI_BY" title="YouTube video player"  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> </div>
+            <section class="r">
+              <h2>ya hable de RE3</h2>
+              <p>Pero en esta cancion la amo y pues aqui esta la puse aqui para rellenar.</p>
+              <p class="details">20/06/21 | Advertising | Alex T</p>
+            </section>
+          </div>
+          <!-- end post -->
+          
+          
+          <div class="break"></div>
+        <!-- end content -->  
+      </section>
+    </div>
+    <!-- END content -->
+
+    <!-- BEGIN sidebar -->
+    <aside id="sidebar">
+      <!-- begin advertisement -->
+      <div class="ads"> 
+ <!-- Bbegin svg clock-->
+ <p>Este es un svg</p>
+ <svg class="clock" viewBox="0 0 50 50">
+   <g>   
+   <circle id="secondsCirc" cy="-.5" r="14" stroke="#24303a" /> 
+   <path id="secondsPath" d="" fill="transparent" stroke="#1ed5f6" ></path>
+ 
+   <circle id="minCirc" cy="-.5" r="10" stroke="#24303a" /> 
+   <path id="minPath" d="" fill="transparent" stroke="#f61ed5" ></path>
+   
+   <circle id="hoursCirc" cy="-.5" r="6" stroke="#24303a" /> 
+   <path id="hoursPath" d="" fill="transparent" stroke="#d5f61e" ></path> 
+     
+     
+     <circle id="hub" cy="-.5" r="3.5" fill="#24303a" /> 
+   </g>
+   <text id="text"  transform="translate(25 5)">00:00:00</text>
+   <text id="toggle" transform="translate(15 45)">STOP</text>
+   <text id="reset" transform="translate(37 45)">RESET</text>
+ </svg>
+ <!-- end svg clock -->
+ <script type="text/javascript" src="../static/code_clock.js"></script>
+ <p>Este es un svg</p>
+ <svg width="200" height="210">
+   <polygon points="100,10 40,198 190,78 10,78 160,198"
+   style="fill:#D7DAD7;stroke:purple;stroke-width:5;fill-rule:nonzero;" />
+ </svg>
+      </div>
+      <!-- end advertisement -->
+      
+      <!-- begin popular posts -->
+      <section class="box">
+        <h2>Discord Server</h2>
+          <iframe class="discord" src="https://discord.com/widget?id=856316210228363284&theme=dark" width="240" height="400" 
+           sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+        
+      </section>
+      <!-- end popular posts -->
+
+      
+    </aside>
+    <!-- END sidebar -->
+    <div class="break"></div>
+  </div>
+  <!-- END wrapper -->
+   
+</main>
+<!-- BEGIN main --> 
+
+<!-- BEGIN footer -->
+<footer id="footer">
+  <p>Copyright &copy; 2021 - Creado Por: </p>
+  <p>- Garduño Téllez Emmanuel </p>
+  <p>- Toledo Presa Alexis Rodrigo </p>
+  <p>- Grupo: 2651 </p>
+  <p>- Prof. Rubén Romero Ruiz</p>
+  <p>- Proyecto de Desarrollo Web  </p>
+</footer>
+<!-- END footer -->
+
+</body>
+</html>

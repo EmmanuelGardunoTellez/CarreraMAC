@@ -1,0 +1,149 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
+<head>
+<title>Loging registrados</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css" href="../static/style.css" />
+<!-- -->
+<link rel="icon" href="{{url_for('static', filename='images/descargar.ico')}}">
+<script type="text/javascript" src="../static/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="../static/scripts.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<!--[if lte IE 6]>
+<link rel="stylesheet" type="text/css" href="ie.css" />
+<script type="text/javascript" src="js/unitpngfix.js"></script>
+<![endif]-->
+</head>
+<body>
+
+<!-- BEGIN header -->
+<header id="header">
+ 
+  <nav class="color_header">
+  <ul class="pages">
+    <li><a href="/">Principal</a></li>
+    <li><a href="/loging">Iniciar sesion</a></li>
+    <li><a href="#footer">Contacto</a></li>
+  </ul>
+  </nav>
+  <section class="logo"> 
+    <a href="/"><img src="{{url_for('static', filename='images/una_pagina_mas.png')}}"></img> </a>
+    
+  </section>
+
+  
+  <nav class="nav1">
+    <ul class="categorias">
+      <li><a href="/">Recientes</a></li>
+      <li><a href="#">Consolas</a>
+        <ul class="sub_menu1">
+          <li><a href="/nintendo">Nintendo</a></li>
+          <li><a href="/play">playstation</a></li>
+          <li><a href="/xbox">XBox</a></li>
+          <li><a href="/pc">PC</a></li>
+        </ul> </li> 
+      <li><a href="/moviles">Moviles</a></li>
+      <li><a href="/anime">Anime </a></li>
+      <li><a href="/lr">Login registrados</a></li>
+    </ul>
+  </nav>
+  
+</header>
+<!-- END header -->
+
+<!-- BEGIN main -->  
+<main id="main">
+  
+  <!-- BEGIN wrapper -->
+  <div id="wrapper">  
+    <div>
+      <h2>Usuarios</h2>
+      <table border=8>
+        <thead>
+          <td>ID</td>
+          <td>Usuario</td>
+          <td>Loging</td>
+        </thead>
+
+        {% for fila in filas %}
+          <tr>
+            <td>{{fila["id"]}}</td>
+            <td>{{fila["name"]}}</td>
+            <td>{{fila["lr"]}}</td>
+          </tr>
+        {% endfor%}
+      </table>
+      <br><br>
+    </div> 
+
+    </div>
+    <!-- END content -->
+
+    <!-- BEGIN sidebar -->
+    <aside id="sidebar">
+      <!-- begin advertisement -->
+      <div class="ads"> 
+ <!-- Bbegin svg clock-->
+ <p>Este es un svg</p>
+ <svg class="clock" viewBox="0 0 50 50">
+   <g>   
+   <circle id="secondsCirc" cy="-.5" r="14" stroke="#24303a" /> 
+   <path id="secondsPath" d="" fill="transparent" stroke="#1ed5f6" ></path>
+ 
+   <circle id="minCirc" cy="-.5" r="10" stroke="#24303a" /> 
+   <path id="minPath" d="" fill="transparent" stroke="#f61ed5" ></path>
+   
+   <circle id="hoursCirc" cy="-.5" r="6" stroke="#24303a" /> 
+   <path id="hoursPath" d="" fill="transparent" stroke="#d5f61e" ></path> 
+     
+     
+     <circle id="hub" cy="-.5" r="3.5" fill="#24303a" /> 
+   </g>
+   <text id="text"  transform="translate(25 5)">00:00:00</text>
+   <text id="toggle" transform="translate(15 45)">STOP</text>
+   <text id="reset" transform="translate(37 45)">RESET</text>
+ </svg>
+ <!-- end svg clock -->
+ <script type="text/javascript" src="../static/code_clock.js"></script>
+ <p>Este es un svg</p>
+ <svg width="200" height="210">
+   <polygon points="100,10 40,198 190,78 10,78 160,198"
+   style="fill:#D7DAD7;stroke:purple;stroke-width:5;fill-rule:nonzero;" />
+ </svg>
+      </div>
+      <!-- end advertisement -->
+      
+      <!-- begin popular posts -->
+      <section class="box">
+        <h2>Discord Server</h2>
+          <iframe class="discord" src="https://discord.com/widget?id=856316210228363284&theme=dark" width="240" height="400" 
+           sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+        
+      </section>
+      <!-- end popular posts -->
+
+      
+    </aside>
+    <!-- END sidebar -->
+    <div class="break"></div>
+  </div>
+  <!-- END wrapper -->
+   
+</main>
+<!-- BEGIN main --> 
+
+<!-- BEGIN footer -->
+<footer id="footer">
+  <p>Copyright &copy; 2021 - Creado Por: </p>
+  <p>- Garduño Téllez Emmanuel </p>
+  <p>- Toledo Presa Alexis Rodrigo </p>
+  <p>- Grupo: 2651 </p>
+  <p>- Prof. Rubén Romero Ruiz</p>
+  <p>- Proyecto de Desarrollo Web  </p>
+</footer>
+<!-- END footer -->
+
+</body>
+</html>
