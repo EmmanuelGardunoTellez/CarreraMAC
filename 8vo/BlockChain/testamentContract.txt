@@ -1,0 +1,87 @@
+// SPDX-License-Identifier: GPL-3.0
+
+pragma solidity >=0.7.0 <0.9.0;
+
+interface KeyTestament{ //define interface for the password contract
+     function checkKey (string memory _key) external;
+     function createKey (string memory _initialKey) external;
+
+}
+interface calUnixTime{ //define interface for the unixTime contract to calculate
+     function toTimestamp(uint16 year, uint8 month, uint8 day, uint8 hour, uint8 minute, uint8 second) external pure returns (uint timestamp);
+
+}
+
+contract Testament {
+    //define the contract as variable here to access to all
+    KeyTestament password; 
+    calUnixTime calculateUT;
+
+    address heir; //heredero
+    address testator; //testador
+    // Variables for the contract who will calculate the unix time
+    uint16 startYear;
+    uint8 startMonth;
+    uint8 startDay;
+    uint8 startHour;
+    uint8 startMinute;
+    uint8 startSecond;
+    //
+    uint256 public createTime; //current time calculate
+    uint256 public expectedDate; //time it will recibe from contract
+
+    constructor (uint16 _year, //variables for the calcute time for future
+                uint8 _month, 
+                uint8 _day, 
+                uint8 _hour, 
+                uint8 _minute, 
+                uint8 _second, 
+                address _heir, 
+                string memory _createlKey, // password that is encrypted in another contract
+                address _contrKeyAddrs, // address from the keyTestament contract
+                address _contrTimeAddrs // address from the calUnixTime contract
+                ) payable {
+        //Address who gonna send money 
+        testator = msg.sender;
+        // who gona recive 
+        heir = _heir;
+        require(msg.sender != _heir, "El testador no puede ser el heredero");
+        
+        startYear = _year;
+        startMonth = _month;
+        startDay = _day;
+        startHour = _hour;
+        startMinute = _minute;
+        startSecond = _second;
+        // call the contract who calculate the date to unixtime
+        calculateUT = calUnixTime(address(_contrTimeAddrs));
+        // the contract calculte the unix time and return
+        expectedDate = calculateUT.toTimestamp( startYear, startMonth, startDay, startHour, startMinute, startSecond);
+        createNewKey(_contrKeyAddrs, _createlKey);
+    }
+
+    // this is the main function check the time and password
+    function tryTransaction(string memory _tryKey) payable public {
+        createTime = block.timestamp; // take the current unix time
+        uint256 amount = msg.value;
+        require(
+            expectedDate <= createTime, // if the current time is less than  
+            "Aun no es tiempo para esto" // than the calculated stop the function
+        );
+        password.checkKey(_tryKey);// check the password in the other contract
+        transferAmount(amount);
+    }
+
+    //function who tranfer the ether between acounts need to be public to tranfer
+    function transferAmount(uint256 _amount) public payable {
+        require( _amount <= testator.balance, "Ether en la cuenta no suficiente");
+        address payable receiver = payable(heir); // set payable the address of heir
+        receiver.transfer(_amount); // pay to heir 
+    }
+    //call funcion from KeyTestament to set password
+    function createNewKey(address contractAdress_, string memory _Inkey) public{
+         password=KeyTestament(address(contractAdress_)); // create coneccion to contract
+         password.createKey(_Inkey); // set password to the word
+         return;
+    }
+}

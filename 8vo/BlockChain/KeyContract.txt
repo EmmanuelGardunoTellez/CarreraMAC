@@ -1,0 +1,26 @@
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity >=0.7.0 <0.9.0;
+
+contract password {
+    bytes32 key; // password of the testament contract
+    bytes32 hashed;
+    
+    // consult if the ingresed password is correct
+    modifier isTruekey(string memory _key) { 
+        hashed = keccak256(abi.encodePacked(_key));
+        require(key == hashed, "La contracena es incorrecta");
+        
+        _;
+        
+    }
+    // call modifier to consult the password
+    function checkKey (string memory _key) isTruekey(_key) external {
+        hashed = keccak256(abi.encodePacked(_key));
+        key = hashed;
+        
+    }
+    // create the password from the testament contract
+    function createKey (string memory _initialKey) external{
+        key = keccak256(abi.encodePacked(_initialKey));
+    }      
+}
