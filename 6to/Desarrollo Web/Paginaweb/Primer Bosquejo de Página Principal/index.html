@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<title> Primer Bosquejo de Página Principal</title>
+		<!-- import bootstrap -->
+		<link rel="stylesheet"
+			  type="text/css"
+			  href="bootstrap.css"
+		      />
+
+		<!-- import our own stylesheet -->
+		<link rel="stylesheet"
+			  type="text/css"
+			  href="css/styles.css"
+		      />	
+			  
+			  
+		<!-- import jQuery -->
+		<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+	</head>
+	<body>
+		<!-- basic header-->
+		<header class="header">
+		<div class="menu part-container"> <!--split the row in 12 spaces -->
+			<div class="col-md-3"> <!--first 3 parts -->
+			<p id="logo" class="list-group-item head-parts logo-XD"> 
+					Una Pagina de videojuegos más
+            </p>
+			</div>
+
+			<div class="col-md-6"> <!--middle 6 parts -->
+			<p  class="list-group-item head-parts"> 
+					 barra de navegacion  
+            </p>
+			</div>
+			
+			<div class="col-md-3"> <!--middle 6 parts -->
+			<p  class="list-group-item head-parts"> 
+					 barra de busqueda  
+            </p>
+			</div>
+		</div>
+		</header>
+		
+		
+	<main class="main">
+	
+	<div class="container">
+		<aside>
+
+		<nav>
+			<ul class="list-group scrollable" id="bar-social-apis">
+
+				<li id="api_1" class="list-group-item apis_space"> 
+					 <p>api twitter </p>
+				</li>
+			
+				<li id="api_2" class="list-group-item apis_space"> 
+					 <p>api discord</p>
+				</li>
+			
+				<li id="text" class="list-group-item apis_space"> 
+					<p>Equipo 5</p>
+				</li>
+			</ul>
+		</nav>
+
+		</aside>
+		
+		<h1>Image Gallery</h1>
+
+		<!--
+		   These are the thumbnail images.
+		   They are laid out using the 
+		   bootstrap grid.
+		   I have given them all the class
+		   "crop-image" which I use in the
+		   css and the javascript code.
+		-->
+		<div class="row ">
+			<div class="col-md-2">
+				<img class="crop-img" 
+				  src="image/img_5.jpg" 
+				  alt="pc gaming"/> 
+			</div>
+			<div class="col-md-2">
+				<img class="crop-img" 
+				  src="image/img_6.jpg" 
+				  alt="old console"/> 
+			</div>
+			<div class="col-md-2">
+				<img class="crop-img" 
+				  src="image/img_7.jpg" 
+				  alt="BMO"/> 
+			</div>
+			<div class="col-md-2">
+				<img class="crop-img" 
+				   src="image/img_8.jpg" 
+				   alt="pac-man"/> 
+			</div>
+		</div>
+		<!--
+			this is the large image which is
+			on a row of its own. 
+			I will change it's source in the 
+			javascript
+		-->
+		<div class="row">
+			<div class="col-md-9">
+				<img id="bigImage" 
+				  class="large-img" 
+				  src="image/img_5.jpg" 
+				  alt="first-one"/> 
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-6">
+				<img id="part-img1" 
+				  class="large-img" 
+				  src="image/img_1.png" 
+				  alt="games_1"/> 
+			</div>
+			<div class="col-md-6">
+				<img id="part-img2" 
+				  class="large-img" 
+				  src="image/img_2.jpg" 
+				  alt="lol trump"/> 
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-6">
+				<img id="part-img3" 
+				  class="large-img" 
+				  src="image/img_3.jpg" 
+				  alt="retro console"/> 
+			</div>
+			<div class="col-md-6">
+				<img id="part-img4" 
+				  class="large-img" 
+				  src="image/img_4.jpg" 
+				  alt="neon desing"/> 
+			</div>
+		</div>
+	
+	</div>
+	
+	</main>
+	
+	 <footer>
+        <nav>
+            <p> Realizado por:
+			Toledo Presa Alexis Rodrigo y Garduño Téllez Emmanuel </p>
+		</nav>
+        <div class="copyrigth">
+            <p>&copy;2021</p>
+        </div>
+    </footer>
+	
+	<script>
+		// when we click on the thumbnail
+		// we set the src attribute of the 
+		// bit image to be the same as the 
+		// src of the image we have clicked on
+		// ("this"). This loads the same
+		// image file into the big image
+		$(".crop-img").click(function(){
+			$("#bigImage").attr('src', 
+				$(this).attr('src'));
+		});
+	</script>
+
+	</body>
+</html>

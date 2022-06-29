@@ -1,0 +1,11 @@
+#canvas {
+    border: 1px solid yellowgreen; 
+
+    
+   }
+   
+   .stroke-color {
+     border-radius: 50%;
+     width: 30px;
+     height: 30px;
+   }

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilo.css">
+    <title>Canvas & SVG</title>
+</head>
+<body>
+    <h1>Canvas & SVG</h1>
+    <h2>circulos</h2>
+    <h3>Toledo Presa & Garduño Téllez</h3>
+    <canvas width="200" height="200" id="mipanel"></canvas>
+   <script>
+        var miLienzo = document.getElementById("mipanel");
+	    var lapiz = miLienzo.getContext("2d");
+    	lapiz.beginPath();	  
+	    lapiz.arc(100,100,60, 0, 2*Math.PI);
+	    lapiz.lineWidth = 3;
+	    lapiz.stroke();
+    </script>
+
+    <svg width="200" height="200">
+        <circle cx="100" cy="100" r="60"
+        stroke="red" stroke-width="3" fill="blue" />
+      </svg>
+      <video src="20180821051131.mp4" controls></video>
+</body>
+</html>

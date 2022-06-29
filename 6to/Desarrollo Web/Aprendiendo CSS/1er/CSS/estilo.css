@@ -1,0 +1,44 @@
+*{
+    color: blueviolet;
+}
+
+h1:hover{
+    color: cyan;
+}
+
+h2{
+    color: royalblue !important;
+}
+
+h2{
+    color:mediumaquamarine;
+}
+
+
+
+.titulo-h2{
+    color: darkgreen;
+}
+
+#jaja {
+    color: deeppink;
+}
+
+[rancio="sii"]{
+    color: gold;
+}
+
+h2 p {
+    color: magenta;
+}
+h2 h4{
+    color: maroon;
+}
+
+.from__input--active{
+    color: red;
+}
+
+.from__input{
+    color: blue;
+}
