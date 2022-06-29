@@ -1,0 +1,78 @@
+---
+title: "Practica 1"
+author: "Emmanuel Garduño Téllez"
+date: "1/4/2021"
+output: pdf_document
+---
+```{r}
+#Instalar librerias y habilitarlas
+library("tidyverse")
+library("ggplot2")
+library("moments")
+library(readr)
+library(car)
+#Asignar la carpeta del trabajo
+getwd()
+setwd("C:\\Users\\Emman\\Documents\\CCH-N} FES-A\\fessaa\\FES\\6to Semestre\\Estadistica II\\practica1")
+```
+# Código Markdown
+
+1. **[2 Puntos]** En el archivo \texttt{Transporte.csv} diponible [aquí](https://www.piazza.com/class_profile/get_resource/klfkfaohn5txm/kmbfdbos53v3lt), se muestra en la variable  \texttt{\detokenize{GASTO}} el gasto en transporte mensual en euros de 59 individuos.
+
++ Contrasta la hipótesis de que el gasto mensual sea diferente en hombres que en mujeres. 
+
+```{r}
+#leer datos problema 1
+library(readr)
+Transporte<-read_delim("~/CCH-N} FES-A/fessaa/FES/6to semestre/Estadistica II/practica1/Transporte.csv", 
+                         ";", escape_double = FALSE, locale = locale(decimal_mark = ",", 
+                          grouping_mark = "."), trim_ws = TRUE)
+```
+Ahora se obtedra el Mann-Whitney
+```{r}
+#Obtener Mann-Whitney
+rango <-rank(Transporte$GASTO)
+cbind(Transporte,rango)
+```
+```{r}
+hombres <- subset(Transporte, SEXO == "H")$GASTO
+mujeres <- subset(Transporte, SEXO == "M")$GASTO
+wilcox.test(hombres, mujeres)
+```
+
++ En el contraste anterior, ¿es necesario asumir normalidad en los datos? En cualquier caso, contrasta dicha hipótesis de normalidad.
+
+
+
+2. **[1 Punto]** En el archivo de datos \texttt{\detokenize{Desplazamientos.csv}} disponible \href{https://www.piazza.com/class_profile/get_resource/klfkfaohn5txm/kmbfdbbyfdc11t}{aquí}, se muestra en las variables \texttt{\detokenize{TIEMPO}} y \texttt{\detokenize{TRANSPORTE}}, el tiempo requerido y el tipo de transporte utilizado, respectivamente, para el desplazamiento de 40 estudiantes desde su domicilio a su universidad.
+
++ Contrastar la hipótesis de que la distribución del tiempo de desplazamiento para los estudiantes que utilizan el transporte público sea diferente de los que usan transporte privado.
+```{r}
+Desplazamientos <- read_delim("~/CCH-N} FES-A/fessaa/FES/6to semestre/Estadistica II/practica1/Desplazamientos.csv", 
+                              ";", escape_double = FALSE, trim_ws = TRUE)
+
+View(Desplazamientos)
+rangoDesplazamiento <- rank(Desplazamientos$Tiempo)
+cbind(Desplazamientos,rangoDesplazamiento)
+publico <- subset(Desplazamientos, Transporte == "Publico")$Tiempo
+privado <- subset(Desplazamientos, Transporte == "Privado")$Tiempo
+wilcox.test(publico,privado)
+```
+
+
++ ¿Hay evidencias de que el tiempo de desplazamiento depende del tipo de transporte?
+
+3. **[2 Puntos]** El archivo \texttt{\detokenize{Edad_ingreso_sem.csv}} disponible \href{https://www.piazza.com/class_profile/get_resource/klfkfaohn5txm/kmfk0i6xjtc268}{aquí}, contiene las fechas de ingreso al Servicio Exterior Mexicano de 953 personas.
++ Dibuja esquemáticamente las funciones de densidad de las edades por sexo.
++ Determina si existe alguna diferencia en las edades de ingreso para hombres y mujeres.
+    
+
+
+3.  **[5 Puntos]** En el archivo \texttt{\detokenize{Gastotabaco.csv}} disponible \href{https://www.piazza.com/class_profile/get_resource/klfkfaohn5txm/kmbfdbbs75r1kb}{aquí}  , se muestra en las variables \texttt{\detokenize{EDAD}} y \texttt{\detokenize{GASTO}}, 
+respectivamente, la edad y el gasto en tabaco de una muestra de fumadores.
++ Dibuja esquemáticamente un diagrama de dispersión que relacione la edad y el gasto en tabaco e indica si existe aparentemente algún tipo de relación entre ambas variables.
++ Indica si existe evidencia estadística  de que cuando aumenta la edad, aumenta el gasto en tabaco.
++ Dibuja esquemáticamente la función de distribución empírica del gasto en tabaco y, en la misma gráfica, dibuja la función de distribución teórica de una exponencial de media 15 euros.
++ Contrasta la hipótesis de que el gasto en tabaco siga una distribución exponencial de media 15 euros.
++ Suponiendo que el modelo exponencial del apartado anterior sea adecuado, calcula
+la probabilidad de que un fumador gaste más de 30 euros.

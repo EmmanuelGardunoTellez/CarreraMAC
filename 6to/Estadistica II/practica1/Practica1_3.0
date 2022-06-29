@@ -1,0 +1,93 @@
+---
+title: "EGT_Practica_1"
+author: "Emmanuel Garduño Téllez"
+date: "6/4/2021"
+output: pdf_document
+---
+
+#Practica 1
+```{r}
+#Carga de librerias
+library("tidyverse")
+library("ggplot2")
+library("moments")
+library(readr)
+library(car)
+```
+
+
+
+1. **[2 Puntos]** En el archivo \texttt{Transporte.csv} diponible [aquí](https://www.piazza.com/class_profile/get_resource/klfkfaohn5txm/kmbfdbos53v3lt), se muestra en la variable  \texttt{\detokenize{GASTO}} el gasto en transporte mensual en euros de 59 individuos.
+
++ Contrasta la hipótesis de que el gasto mensual sea diferente en hombres que en mujeres. 
+```{r}
+
+Transporte <- read_delim("~/CCH-N} FES-A/fessaa/FES/6to semestre/Estadistica II/practica1/Transporte.csv", 
+                         ";", escape_double = FALSE, trim_ws = TRUE)
+
+GastoMujeres <- subset(Transporte, SEXO=="M", select = c(GASTO, SEXO))
+GastoHombres <- subset(Transporte, SEXO=="H", select = c(GASTO, SEXO))
+GASTOS<-rbind(GastoHombres,GastoMujeres)
+rangos1<- rank(GASTOS$GASTO)
+GASTOS<-cbind(GASTOS, rangos1)
+r1=0
+r2=0
+for(i in 1:length(GASTOS$GASTO)){
+  if(GASTOS$SEXO[i]=="H") r1<-r1+(GASTOS$rangos1[i])
+}
+for(i in 1:length(GASTOS$GASTO)){
+  if(GASTOS$SEXO[i]=="M") r2<-r2+(GASTOS$rangos1[i])
+}
+
+n1<-length(GastoHombres$GASTO)
+n2<-length(GastoMujeres$GASTO)
+U1 <- (n1*n2)+(n1*(n1+1)/2)-r1
+U2 <- (n1*n2)+(n2*(n2+1)/2)-r2
+U<- min(U1,U2)
+U
+Z<-(U-(n1*n2)/2)/(sqrt((n1*n2*(n1+n2+1)/12)))
+abs(Z)
+alfa=0.05
+qnorm(1-(alfa)/2,0,1)
+abs(Z)>qnorm(1-(alfa)/2,0,1)
+```
+Por lo tanto, son diferentes una de la otra, ya uqe se mostro, que no son iguales
+
++ En el contraste anterior, ¿es necesario asumir normalidad en los datos? En cualquier caso, contrasta dicha hipótesis de normalidad.
+
+
+
+2. **[1 Punto]** En el archivo de datos \texttt{\detokenize{Desplazamientos.csv}} disponible \href{https://www.piazza.com/class_profile/get_resource/klfkfaohn5txm/kmbfdbbyfdc11t}{aquí}, se muestra en las variables \texttt{\detokenize{TIEMPO}} y \texttt{\detokenize{TRANSPORTE}}, el tiempo requerido y el tipo de transporte utilizado, respectivamente, para el desplazamiento de 40 estudiantes desde su domicilio a su universidad.
++ Contrastar la hipotesis de que la distribución del tiempo de desplazamiento para los estudiantes que utilizan el transporte público sea diferente de los que usan transporte privado. 
+```{r}
+Desplazamientos<-read_delim("CCH-N} FES-A/fessaa/FES/6to semestre/Estadistica II/practica1/Desplazamientos.csv", header = T, sep=";", dec=",")
+DesplazamientosPublico<-subset(Desplazamientos, Transporte=="Publico", select = c(Tiempo, Transporte))
+DesplazamientosPrivado<-subset(Desplazamientos, Transporte=="Privado", select = c(Tiempo, Transporte))
+TIEMPOS<-rbind(DesplazamientosPublico,DesplazamientosPrivado)
+TIEMPOS<-arrange(TIEMPOS, Tiempo)
+rango2<-rank(TIEMPOS$Tiempo)
+TIEMPOS<-cbind(TIEMPOS, rango2)
+t1=0
+t2=0
+for(i in 1:length(TIEMPOS$Tiempo)){
+  if(TIEMPOS$Transporte[i]=="Publico") t1<-t1+(TIEMPOS$rango2[i])
+}
+for(i in 1:length(TIEMPOS$Tiempo)){
+  if(TIEMPOS$Transporte[i]=="Privado") t2<-t2+(TIEMPOS$rango2[i])
+}
+m1<-length(DesplazamientosPublico$Tiempo)
+m2<-length(DesplazamientosPrivado$Tiempo)
+W1 <- (m1*m2)+(m1*(m1+1)/2)-t1
+W2 <- (m1*m2)+(m2*(m2+1)/2)-t2
+W<- min(W1,W2)
+W
+Z1<-(W-(m1*m2)/2)/(sqrt((m1*m2*(m1+m2+1)/12)))
+abs(Z1)
+alfa=0.05
+qnorm(1-(alfa)/2,0,1)
+abs(Z1)>qnorm(1-(alfa)/2,0,1)
+```
+Por lo tanto, el transporte publico y privado tienen la misma distribución de tiempo, son iguales
+
++ ¿Hay evidencias de que el tiempo de desplazamiento depende del tipo de transporte?
+En si el tiempo de desplazamiento, ya sea en transporte publico o privado, es el mismo, por lo tanto, no depende del tipo de transporte 

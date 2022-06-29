@@ -1,0 +1,41 @@
+Nombre;Universidad;Domicilio;Transporte;Precio;Tiempo
+1;UAM;Colmenar V;Publico;1,72;45
+2;UPM;Colmenar V;Privado;5;30
+3;UPM;Getafe;Publico;1,31;60
+4;Ces Don Bosco;Madrid;Publico;1,16;5
+5;UCM;Segovia;Publico;3,5;80
+6;UAM;Colmenar V;Publico;1,72;20
+7;UC3M;Colmenar V;Publico;1,72;115
+8;UPM;Madrid;Privado;1,16;10
+9;UPM;Madrid;Privado;1,18;15
+10;UPM;Boadilla d. M;Privado;2,8;20
+11;UC3M;Aranjuez;Publico;1,43;50
+12;UC3M;Villaverde;Privado;;20
+13;UC3M;Aranjuez;Publico;1,86;60
+14;UCM;Aranjuez;Publico;1,95;90
+15;UC3M;Villaverde;Publico;1,33;40
+16;URJC;Seseña;Publico;1,95;75
+17;UCM;Valdemoro;Publico;1,95;80
+18;URJC;Valdemoro;Publico;1,63;70
+19;UAM ;Madrid;Publico;1,86;60
+20;URJC;Fuenlabrada;Publico;0,96;25
+21;UC3M;Madrid;Privado;1,65;20
+22;UCM;Madrid;Publico;1,16;40
+23;UAM;Madrid;Publico;1,32;50
+24;URJ;Parla;Publico;1,5;45
+25;UC3M;Getafe;Privado;1,36;20
+26;UCM;Madrid;Publico;1,16;30
+27;UPC;Madrid;Publico;1,32;45
+28;UPM;Madrid;Privado;0,68;10
+29;UC3M;Madrid;Privado;1,65;25
+30;UCM;Madrid;Publico;1,16;20
+;URJC;Madrid;Publico;0,89;40
+;URJC;Madrid;Publico;1,43;55
+;UCM;Madrid;Publico;0,89;20
+;UCM;Madrid;Privado;1,59;15
+;UPM;Pozuelo;Privado;1,81;30
+;UC3M;Madrid;Publico;3,5;45
+;UC3M;Móstoles;Publico;1,1;45
+;UC3M;Madrid;Publico;1,1;45
+;UAM;Madrid;Publico;1,32;30
+;UCM;Móstoles;Publico;1,43;80

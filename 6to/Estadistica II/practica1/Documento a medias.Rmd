@@ -1,0 +1,67 @@
+---
+title: "Practica1"
+author: "Emmanuel Garduño Téllez"
+date: "30/3/2021"
+output: pdf_document
+---
+
+```{r}
+#Instalar librerias y habilitarlas
+library("tidyverse")
+library("ggplot2")
+library("moments")
+library(readr)
+library(car)
+#Asignar la carpeta del trabajo
+getwd()
+setwd("C:\\Users\\Emman\\Documents\\CCH-N} FES-A\\fessaa\\FES\\6to Semestre\\Estadistica II\\practica1")
+```
+se cargaran los datos del CSV, para el problema 1
+```{r}
+#leer datos problema 1
+library(readr)
+Transporte <- read_delim("~/CCH-N} FES-A/fessaa/FES/6to semestre/Estadistica II/practica1/Transporte.csv", 
+                         ";", escape_double = FALSE, locale = locale(decimal_mark = ",", 
+                                                                     grouping_mark = "."), trim_ws = TRUE)
+```
+Ahora se obtedra el Mann-Whitney
+
+```{r}
+#Obtener Mann-Whitney
+rango <-rank(Transporte$GASTO)
+cbind(Transporte,rango)
+```
+```{r}
+hombres <- subset(Transporte, SEXO == "H")$GASTO
+mujeres <- subset(Transporte, SEXO == "M")$GASTO
+wilcox.test(hombres, mujeres)
+```
+El porblema 2, primero debemos sacar la edad
+```{r}
+##leer datos problema 2, nota separados por ",", conseguir y arreglar las fechas
+Edad_ingreso_sem = read.table("~/CCH-N} FES-A/fessaa/FES/6to semestre/Estadistica II/practica1/Edad_ingreso_sem.csv", sep=",", header=1)
+Edad_ingreso_sem$FECHA_INGRESO <- ifelse(Edad_ingreso_sem$FECHA_INGRESO == '01/15/2010', c('15/01/2010'),Edad_ingreso_sem$FECHA_INGRESO)
+Edad_ingreso_sem$RFC <- substr(Edad_ingreso_sem$RFC, start = 5, stop = 11) 
+mode(Edad_ingreso_sem$RFC)<-"numeric"
+Edad_ingreso_sem$RFC <-as.Date(str_replace(Edad_ingreso_sem$RFC,"(\\d{1,2})(\\d{1,2})(\\d{1,2})","19\\1/\\2/\\3"), format =  "%Y/%m/%d")
+Edad_ingreso_sem$FECHA_INGRESO <- as.Date(Edad_ingreso_sem$FECHA_INGRESO, format="%d/%m/%Y")
+
+edad_decimal <- (Edad_ingreso_sem$FECHA_INGRESO-Edad_ingreso_sem$RFC)
+edad_decimal2 <- (edad_decimal/365)
+Edad_ingreso_sem2 <- Edad_ingreso_sem %>% mutate (EdadFraccion = edad_decimal2)
+```
+luego las graficas
+
+y el final el mann-whitney
+```{r}
+#NOTA: EdadFraccion debe ser tipo caracter
+Edad_ingreso_sem2$EdadFraccion <- as.numeric(Edad_ingreso_sem2$EdadFraccion)
+rango2 <-rank(Edad_ingreso_sem2$EdadFraccion)
+cbind(Edad_ingreso_sem2,rango2)
+```
+```{r}
+hombres2 <- subset(Edad_ingreso_sem2, GENERO == "H")$EdadFraccion
+mujeres2 <- subset(Edad_ingreso_sem2, GENERO == "M")$EdadFraccion
+wilcox.test(hombres2, mujeres2)
+```
+

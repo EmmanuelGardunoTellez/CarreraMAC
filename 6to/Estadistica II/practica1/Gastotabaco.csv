@@ -1,0 +1,26 @@
+SEXO;EDAD;PAIS ORIGEN;SITUACION;GASTO;DEPORTE;ALCOHOL;;;
+H;21;ESP;Estudiante;20;No;Si;;;
+H;54;ESP;Trabajador;50;No;A veces;;;
+H;20;ESP;Estudiante;10;Si;A veces;;;
+H;25;ESP;Estudiante;30;No;A veces;;;
+H;18;ESP;Estudiante;25;No;Si;;;
+H;19;ESP;Estudiante;5;Si;Si;;;
+H;30;ASIA;Estudiante y trabajador;3;No;Si;;;
+H;22;RESTO DE EUROPA;Trabajador;7;Si;No;;;
+H;21;ESP;Estudiante y trabajador;5;Si;A veces;;Media H;SD H
+H;49;ESP;Trabajador;28;No;A veces;;18,3;14,3808901
+M;43;ESP;Ninguna;20;Si;A veces;;;
+M;18;ESP;Estudiante;12;No;Si;;;
+M;19;ESP;Estudiante;10;No;A veces;;;
+M;50;ESP;Trabajador;6;No;A veces;;;
+M;50;ESP;Trabajador;6;No;A veces;;;
+M;50;ESP;Trabajador;6;No;A veces;;;
+M;20;ESP;Estudiante;5;No;A veces;;;
+M;19;ESP;Estudiante;10;No;A veces;;;
+M;19;AMERICA;Estudiante y trabajador;3;Si;Si;;;
+M;50;ESP;Estudiante y trabajador;45;No;A veces;;;
+M;56;ESP;Trabajador;30;No;A veces;;;
+M;40;ESP;Trabajador;30;Si;A veces;;;
+M;50;ESP;Trabajador;28;No;A veces;;;
+M;50;ESP;Trabajador;4;Si;A veces;;Media M;SD M
+M;50;ESP;Trabajador;6;No;A veces;;14,73;12,358353

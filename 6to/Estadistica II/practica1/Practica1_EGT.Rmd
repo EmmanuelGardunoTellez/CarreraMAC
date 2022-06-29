@@ -1,0 +1,92 @@
+---
+title: "Practica1"
+author: "Emmanuel Garduño Téllez"
+date: "30/3/2021"
+output: pdf_document
+---
+```{r}
+#Instalar librerias y habilitarlas
+library("tidyverse")
+library("ggplot2")
+library("moments")
+library(readr)
+library(car)
+#Asignar la carpeta del trabajo
+getwd()
+setwd("C:\\Users\\Emman\\Documents\\CCH-N} FES-A\\fessaa\\FES\\6to Semestre\\Estadistica II\\practica1")
+```
+# Código Markdown
+
+1. **[3 Puntos]** En el archivo \texttt{Transporte.csv} diponible [aquí](https://www.piazza.com/class_profile/get_resource/klfkfaohn5txm/kmbfdbos53v3lt), se muestra en la variable  \texttt{\detokenize{GASTO}} el gasto en transporte mensual en euros de 59 individuos.
+
++ Contrasta la hipótesis de que el gasto mensual sea diferente en hombres que en mujeres. 
+```{r}
+#leer datos problema 1
+library(readr)
+Transporte<-read_delim("~/CCH-N} FES-A/fessaa/FES/6to semestre/Estadistica II/practica1/Transporte.csv", 
+                         ";", escape_double = FALSE, locale = locale(decimal_mark = ",", 
+                          grouping_mark = "."), trim_ws = TRUE)
+```
+Ahora se obtedra el Mann-Whitney
+```{r}
+#Obtener Mann-Whitney
+rango <-rank(Transporte$GASTO)
+cbind(Transporte,rango)
+```
+```{r}
+hombres <- subset(Transporte, SEXO == "H")$GASTO
+mujeres <- subset(Transporte, SEXO == "M")$GASTO
+wilcox.test(hombres, mujeres)
+```
+
++ En el contraste anterior, ¿es necesario asumir normalidad en los datos? En cualquier caso, contrasta dicha hipótesis de normalidad.
+R= Si, es necesesario asumir la normalidad, ya que los datos provienen de una población distribuida normalmente
+
+
++ ¿Hay evidencias de que el tiempo de desplazamiento depende del tipo de transporte?
+R= Solo tenemos datos de EDAD, TRABAJA, GASTO y SEXO, nada de algun tipo de transporte
+
+2. \textbf{[2 Puntos]} El archivo \texttt{\detokenize{Edad_ingreso_sem.csv}} disponible \href{https://www.piazza.com/class_profile/get_resource/klfkfaohn5txm/kmfk0i6xjtc268}{aquí}, contiene las fechas de ingreso al Servicio Exterior Mexicano de 953 personas.
+```{r}
+Edad_ingreso_sem = read.table("~/CCH-N} FES-A/fessaa/FES/6to semestre/Estadistica II/practica1/Edad_ingreso_sem.csv", sep=",", header=1)
+Edad_ingreso_sem$FECHA_INGRESO <- ifelse(Edad_ingreso_sem$FECHA_INGRESO == '01/15/2010', c('15/01/2010'),Edad_ingreso_sem$FECHA_INGRESO)
+Edad_ingreso_sem$RFC <- substr(Edad_ingreso_sem$RFC, start = 5, stop = 11) 
+mode(Edad_ingreso_sem$RFC)<-"numeric"
+Edad_ingreso_sem$RFC <-as.Date(str_replace(Edad_ingreso_sem$RFC,"(\\d{1,2})(\\d{1,2})(\\d{1,2})","19\\1/\\2/\\3"), format =  "%Y/%m/%d")
+Edad_ingreso_sem$FECHA_INGRESO <- as.Date(Edad_ingreso_sem$FECHA_INGRESO, format="%d/%m/%Y")
+```
+
++ Dibuja esquemáticamente las funciones de densidad de las edades por sexo.
+```{r}
+edad_decimal <- (Edad_ingreso_sem$FECHA_INGRESO-Edad_ingreso_sem$RFC)
+edad_decimal2 <- (edad_decimal/365)
+Edad_ingreso_sem2 <- Edad_ingreso_sem %>% mutate (EdadFraccion = edad_decimal2)
+#NOTA: EdadFraccion debe ser tipo caracter
+Edad_ingreso_sem2$EdadFraccion <- as.numeric(Edad_ingreso_sem2$EdadFraccion)
+rango2 <-rank(Edad_ingreso_sem2$EdadFraccion)
+cbind(Edad_ingreso_sem2,rango2)
+hombres2 <- subset(Edad_ingreso_sem2, GENERO == "H")$EdadFraccion
+mujeres2 <- subset(Edad_ingreso_sem2, GENERO == "M")$EdadFraccion
+par(mfrow = c(1, 1))
+plot(density(hombres2), col = "red", lwd = 3, main = "Distribibion de densidad Hobres y Mujeres",
+     xlab = "Edad", ylab = "densidad")
+lines(density(mujeres2), col = "blue", lwd = 3)
+legend("topleft", lwd = 2, col = c("blue","red"),
+       legend = c("Mujeres", "Hombres" ))
+```
+
++ Determina si existe alguna diferencia en las edades de ingreso para hombres y mujeres.
+```{r}
+wilcox.test(hombres2, mujeres2)
+```
+ 
+
+
+3.  \textbf{[5 Puntos]} En el archivo \texttt{\detokenize{Gastotabaco.csv}} disponible \href{https://www.piazza.com/class_profile/get_resource/klfkfaohn5txm/kmbfdbbs75r1kb}{aquí}  , se muestra en las variables \texttt{\detokenize{EDAD}} y \texttt{\detokenize{GASTO}}, 
+respectivamente, la edad y el gasto en tabaco de una muestra de fumadores.
++ Dibuja esquemáticamente un diagrama de dispersión que relacione la edad y el gasto en tabaco e indica si existe aparentemente algún tipo de relación entre ambas variables.
++ Indica si existe evidencia estadística  de que cuando aumenta la edad, aumenta el gasto en tabaco.
++ Dibuja esquemáticamente la función de distribución empírica del gasto en tabaco y, en la misma gráfica, dibuja la función de distribución teórica de una exponencial de media 15 euros.
++ Contrasta la hipótesis de que el gasto en tabaco siga una distribución exponencial de media 15 euros.
++ Suponiendo que el modelo exponencial del apartado anterior sea adecuado, calcula
+la probabilidad de que un fumador gaste más de 30 euros.
